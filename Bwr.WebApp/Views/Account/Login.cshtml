@@ -1,0 +1,109 @@
+﻿@model Bwr.WebApp.Models.LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.Login</title>
+
+    @Styles.Render("~/Content/css")
+    <link href="~/dependencies/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="~/dependencies/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/dependencies/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/dependencies/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="~/dependencies/build/css/custom.min.css" rel="stylesheet">
+
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/icheck.min.js"></script>
+</head>
+
+<body  >
+    <div>
+
+        <div class="login_wrapper">
+            <div >
+                <section class="login_content">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <h1>Login</h1>
+                        <div>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                            @Html.ValidationMessageFor(m => m.UserName)
+                        </div>
+                        <div>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                        @*<div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "flat" })
+                                    @Html.LabelFor(m => m.RememberMe)
+                                </label>
+                            </div>
+                        </div>*@
+                        <div>
+                            <button type="submit" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i>   Log in</button>
+                            <a class="reset_pass" href="#">Lost your password?</a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="separator">
+                            <p class="change_link">
+                                New to site?
+                                <a href='@Url.Action("Register","Account")' class="to_register"> Create Account </a>
+                            </p>
+                            <div class="clearfix"></div>
+                            <br />
+                            <div>
+                                <h1><i class="fa fa-ship"></i>Bwr Leaders</h1>
+                                <p>©2019 All Rights Reserved. RoroLeaders</p>
+                            </div>
+                        </div>
+                    }
+                </section>
+            </div>
+            
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <!-- FastClick -->
+    <script src="~/Scripts/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/Scripts/nprogress.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/Scripts/custom.min.js"></script>
+
+    <!-- Kendo UI -->
+
+
+
+
+</body>
+</html>
+
+<script>
+        window.applicationpath = "@Url.Content("~")";
+</script>

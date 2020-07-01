@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_BlankPageLayout.cshtml";
+}
+<br />
+<div class="row">
+    <button class="btn btn-success" id="addProvinceTextBtn"><i class="fa fa-plus"></i></button>
+    </div>
+
+
+<div class="row a-province-group">
+    <div class="col-md-8 col-sm-8 a-province">
+        <div class="input-group">
+            <input type="text" data-index="0" data-province-id="0" class="form-control has-error a-province-input" value="" />
+            <span class="input-group-addon" onclick="this.parentElement.parentElement.remove();"><span class="fa fa-close"></span></span>
+        </div>
+    </div>
+   
+</div>
+
+    <script>
+        $(function () {
+
+            $('#addProvinceTextBtn').click(function () {
+                addProvinceTextELement();
+            });
+        });
+
+        function addProvinceTextELement() {
+            var provinceEles = $('.a-province');
+            var isEmpty = false;
+            $('.a-province-group :input.a-province-input').each(function (data) {
+                
+                var value = $(this).val();
+                if (value.trim() == "") {
+                    isEmpty = true;
+                    return;
+                }
+            });
+
+            if (!isEmpty) {
+                var lastProvinceEle = provinceEles[provinceEles.length - 1];
+                var newProvinceEle = $(lastProvinceEle).clone();
+                newProvinceEle.insertAfter(lastProvinceEle);
+
+                //remove copy value from new textbox
+                $('.a-province-group :input.a-province-input').last().val("")
+            }
+            
+        }
+    </script>
+
