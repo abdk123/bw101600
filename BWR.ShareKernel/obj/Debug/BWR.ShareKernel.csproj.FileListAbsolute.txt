@@ -17,3 +17,14 @@ D:\abd-alrahman-k\Projects\BwrExchage\BWR.ShareKernel\bin\Debug\EntityFramework.
 D:\abd-alrahman-k\Projects\BwrExchage\BWR.ShareKernel\bin\Debug\EntityFramework.SqlServer.xml
 D:\abd-alrahman-k\Projects\BwrExchage\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.dll
 D:\abd-alrahman-k\Projects\BwrExchage\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.pdb
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\BWR.ShareKernel.dll
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\BWR.ShareKernel.pdb
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\EntityFramework.dll
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\EntityFramework.SqlServer.dll
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\EntityFramework.xml
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\bin\Debug\EntityFramework.SqlServer.xml
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.csprojAssemblyReference.cache
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.csproj.CoreCompileInputs.cache
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.csproj.CopyComplete
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.dll
+F:\Projects\BwrExchange\bw101600\BWR.ShareKernel\obj\Debug\BWR.ShareKernel.pdb

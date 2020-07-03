@@ -55,50 +55,12 @@ namespace Bwr.WebApp.Installer
             container.Register(Component.For<IUserAppService>().ImplementedBy<UserAppService>().LifestyleTransient());
             container.Register(Component.For<IPermissionAppService>().ImplementedBy<PermissionAppService>().LifestyleTransient());
             container.Register(Component.For<IClientAppService>().ImplementedBy<ClientAppService>().LifestyleTransient());
-            container.Register(Component.For<IClientCashAppService>().ImplementedBy<ClientCashAppService>());
-            container.Register(Component.For<IClientPhoneAppService>().ImplementedBy<ClientPhoneAppService>());
-            container.Register(Component.For<IBranchCommissionAppService>().ImplementedBy<BranchCommissionAppService>());
+            container.Register(Component.For<IClientCashAppService>().ImplementedBy<ClientCashAppService>().LifestyleTransient());
+            container.Register(Component.For<IClientPhoneAppService>().ImplementedBy<ClientPhoneAppService>().LifestyleTransient());
+            container.Register(Component.For<IBranchCommissionAppService>().ImplementedBy<BranchCommissionAppService>().LifestyleTransient());
+            container.Register(Component.For<ICompanyCommissionAppService>().ImplementedBy<CompanyCommissionAppService>().LifestyleTransient());
 
 
-            //container.Register(Component.For<IClientCashFlowAppService>().ImplementedBy<ClientCashFlowAppService>());
-            //container.Register(Component.For<ITreasuryAppService>().ImplementedBy<TreasuryAppService>());
-            //container.Register(Component.For<ITreasuryCashAppService>().ImplementedBy<TreasuryCashAppService>());
-            //container.Register(Component.For<ITreasuryMoneyActionAppService>().ImplementedBy<TreasuryMoneyActionAppService>());
-            //container.Register(Component.For<IUserTreasueryAppService>().ImplementedBy<UserTreasueryAppService>());
-            //container.Register(Component.For<ITransactionAppService>().ImplementedBy<TransactionAppService>());
-            //container.Register(Component.For<ITransactionStatusAppService>().ImplementedBy<TransactionStatusAppService>());
-            //container.Register(Component.For<ITransactionTypeAppService>().ImplementedBy<TransactionTypeAppService>());
-            //container.Register(Component.For<IClaimAppService>().ImplementedBy<ClaimAppService>());
-            //container.Register(Component.For<IExternalLoginAppService>().ImplementedBy<ExternalLoginAppService>());
-
-            //container.Register(Component.For<IRoleAppService>().ImplementedBy<RoleAppService>());
-            //container.Register(Component.For<IUserAppService>().ImplementedBy<UserAppService>());
-            //container.Register(Component.For<ILogAppService>().ImplementedBy<LogAppService>());
-            //container.Register(Component.For<ICompanyAppService>().ImplementedBy<CompanyAppService>());
-            //container.Register(Component.For<ICompanyCashAppService>().ImplementedBy<CompanyCashAppService>());
-            //container.Register(Component.For<ICompanyCashFlowAppService>().ImplementedBy<CompanyCashFlowAppService>());
-            //container.Register(Component.For<ICompanyCommissionAppService>().ImplementedBy<CompanyCommissionAppService>());
-            //container.Register(Component.For<ICompanyCountryAppService>().ImplementedBy<CompanyCountryAppService>());
-            //container.Register(Component.For<ICompanyUserAppService>().ImplementedBy<CompanyUserAppService>());
-            //container.Register(Component.For<IPublicExpenseAppService>().ImplementedBy<PublicExpenseAppService>());
-            //container.Register(Component.For<IPublicIncomeAppService>().ImplementedBy<PublicIncomeAppService>());
-            //container.Register(Component.For<IActionAppService>().ImplementedBy<ActionAppService>());
-            //container.Register(Component.For<IAttachmentAppService>().ImplementedBy<AttachmentAppService>());
-            //container.Register(Component.For<ICoinAppService>().ImplementedBy<CoinAppService>());
-            //container.Register(Component.For<ICountryAppService>().ImplementedBy<CountryAppService>());
-            //container.Register(Component.For<ITypeOfPayAppService>().ImplementedBy<TypeOfPayAppService>());
-            //container.Register(Component.For<IBoxActionAppService>().ImplementedBy<BoxActionAppService>());
-            //container.Register(Component.For<IExchangeAppService>().ImplementedBy<ExchangeAppService>());
-            //container.Register(Component.For<IMoenyActionAppService>().ImplementedBy<MoenyActionAppService>());
-            //container.Register(Component.For<IPhoneBaseAppService>().ImplementedBy<PhoneBaseAppService>());
-            //container.Register(Component.For<IPublicMoneyAppService>().ImplementedBy<PublicMoneyAppService>());
-
-            //container.Register(Component.For<IClientAttatchmentAppService>().ImplementedBy<ClientAttatchmentAppService>());
-
-            //container.Register(Component.For<IClientTypeAppService>().ImplementedBy<ClientTypeAppService>());
-            //container.Register(Component.For<IBranchAppService>().ImplementedBy<BranchAppService>());
-            //container.Register(Component.For<IBranchCashAppService>().ImplementedBy<BranchCashAppService>());
-            //container.Register(Component.For<IBranchCashFlowAppService>().ImplementedBy<BranchCashFlowAppService>());
 
 
         }

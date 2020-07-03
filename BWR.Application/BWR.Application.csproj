@@ -57,6 +57,7 @@
     <Compile Include="AppServices\Clients\ClientPhoneAppService.cs" />
     <Compile Include="AppServices\Companies\CompanyAppService.cs" />
     <Compile Include="AppServices\Companies\CompanyCashAppService.cs" />
+    <Compile Include="AppServices\Companies\CompanyCommissionAppService.cs" />
     <Compile Include="AppServices\Companies\CompanyCountryAppService.cs" />
     <Compile Include="AppServices\Security\PermissionAppService.cs" />
     <Compile Include="AppServices\Security\RoleAppService.cs" />
@@ -69,10 +70,11 @@
     <Compile Include="AppServices\Setting\PublicIncomeAppService.cs" />
     <Compile Include="AppServices\Treasuries\TreasuryAppService.cs" />
     <Compile Include="AppServices\Treasuries\TreasuryCashAppService.cs" />
+    <Compile Include="Common\DtoForDropdown.cs" />
     <Compile Include="Common\EntityDto.cs" />
-    <Compile Include="Dtos\Branch\BranchCommissionDto.cs" />
-    <Compile Include="Dtos\Branch\BranchCommissionInsertDto.cs" />
-    <Compile Include="Dtos\Branch\BranchCommissionUpdateDto.cs" />
+    <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionDto.cs" />
+    <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionInsertDto.cs" />
+    <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionUpdateDto.cs" />
     <Compile Include="Dtos\Branch\BranchDto.cs" />
     <Compile Include="Dtos\Client\ClientAttatchmentDto.cs" />
     <Compile Include="Dtos\Client\ClientCashDto.cs" />
@@ -87,6 +89,10 @@
     <Compile Include="Dtos\Common\MoenyActionDto.cs" />
     <Compile Include="Dtos\Common\PhoneBaseDto.cs" />
     <Compile Include="Dtos\Company\CompanyBalanceDto.cs" />
+    <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionDto.cs" />
+    <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionInsertDto.cs" />
+    <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionsDto.cs" />
+    <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionUpdateDto.cs" />
     <Compile Include="Dtos\Company\CompanyCountriesDto.cs" />
     <Compile Include="Dtos\Log\LogDto.cs" />
     <Compile Include="Dtos\Log\LogInsertDto.cs" />
@@ -155,6 +161,7 @@
     <Compile Include="Interfaces\Client\IClientPhoneAppService.cs" />
     <Compile Include="Interfaces\Company\ICompanyAppService.cs" />
     <Compile Include="Interfaces\Company\ICompanyCashAppService.cs" />
+    <Compile Include="Interfaces\Company\ICompanyCommissionAppService.cs" />
     <Compile Include="Interfaces\Company\ICompanyCountryAppService.cs" />
     <Compile Include="Interfaces\Security\IPermissionAppService.cs" />
     <Compile Include="Interfaces\Security\IRoleAppService.cs" />

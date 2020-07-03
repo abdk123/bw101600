@@ -23,6 +23,8 @@ using System.Linq;
 using System.Reflection;
 using BWR.Application.Dtos.Treasury;
 using BWR.Domain.Model.Treasures;
+using BWR.Application.Dtos.Company.CompanyCommission;
+using BWR.Application.Common;
 
 namespace Bwr.WebApp
 {
@@ -65,8 +67,7 @@ namespace Bwr.WebApp
 
             //Company
             Mapper.CreateMap<Company, CompanyDto>();
-            Mapper.CreateMap<CompanyCountryDto, CompanyCountry>();
-            Mapper.CreateMap<CompanyCountry, CompanyCountryDto>();
+            
             Mapper.CreateMap<Company, CompanyForDropdownDto>();
             Mapper.CreateMap<CompanyInsertDto, Company>();
             Mapper.CreateMap<CompanyUpdateDto, Company>();
@@ -156,8 +157,19 @@ namespace Bwr.WebApp
             Mapper.CreateMap<TreasuryUpdateDto, Treasury>();
             Mapper.CreateMap<Treasury, TreasuryUpdateDto>();
 
-            
+            //CompanyCommission
+            Mapper.CreateMap<CompanyCommission, CompanyCommissionDto>();
+            Mapper.CreateMap<CompanyCommission, CompanyCommissionsDto>()
+                .ForMember(x => x.CountryName, x => x.Ignore())
+                .ForMember(x => x.CoinName, x => x.Ignore());
+            Mapper.CreateMap<CompanyCommissionInsertDto, CompanyCommission>();
+            Mapper.CreateMap<CompanyCommissionUpdateDto, CompanyCommission>();
+            Mapper.CreateMap<CompanyCommission, CompanyCommissionUpdateDto>();
 
+            //CompanyCountry
+            Mapper.CreateMap<CompanyCountryDto, CompanyCountry>();
+            Mapper.CreateMap<CompanyCountry, CompanyCountryDto>();
+            Mapper.CreateMap<CompanyCountry, DtoForDropdown>();
         }
     }
 

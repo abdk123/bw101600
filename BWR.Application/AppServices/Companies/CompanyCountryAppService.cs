@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using BWR.Application.Common;
 using BWR.Application.Dtos.Company;
 using BWR.Application.Interfaces.Company;
 using BWR.Application.Interfaces.Shared;
@@ -124,5 +125,29 @@ namespace BWR.Application.AppServices.Companies
         {
             return _unitOfWork.GenericRepository<CompanyCountry>().FindBy(x => x.CompanyId == companyId && x.CountryId == countryId).Any();
         }
+
+        public IList<DtoForDropdown> GetCompanyCountriesForDropdown(int companyId)
+        {
+            var dtosForDropdown = new List<DtoForDropdown>();
+            try
+            {
+                var companyCountries = _unitOfWork.GenericRepository<CompanyCountry>().FindBy(x => x.CompanyId == companyId).ToList();
+
+                dtosForDropdown = (from c in companyCountries
+                                       select new DtoForDropdown
+                                       {
+                                           Id = c.Id,
+                                           Name = c.Country != null ? c.Country.Name : string.Empty
+                                       }).ToList();
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return dtosForDropdown;
+        }
+
+        
     }
 }
