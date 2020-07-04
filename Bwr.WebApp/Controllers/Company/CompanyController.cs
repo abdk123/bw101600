@@ -191,55 +191,6 @@ namespace Bwr.WebApp.Controllers
 
         #endregion
 
-        #region Company Balance
-
-        public ActionResult GetCompanyBalance(int companyId)
-        {
-            var companyCashs = _companyCashAppService.GetCompanyCashs(companyId).OrderBy(x=>x.CoinName);
-
-            return Json(new { data = companyCashs }, JsonRequestBehavior.AllowGet);
-        }
-
-        
-
-        [HttpGet]
-        public ActionResult CountryCash(int companyId)
-        {
-            var dto = new CompanyCashDto()
-            {
-                CompanyId = companyId
-            };
-            return PartialView("_CompanyCash", dto);
-        }
-
-        [HttpPost]
-        public ActionResult EditCompanyCash(CompanyBalanceDto dto)
-        {
-            var companyBalance = _companyCashAppService.UpdateBalance(dto);
-            if (companyBalance!=null)
-                _success = true;
-            else
-            {
-                _success = false;
-                _message = "حدثت مشكلة اثناء تعديل البيانات ";
-            }
-
-            return Json(new { Success = _success, Message = _message   }, JsonRequestBehavior.AllowGet);
-        }
-
-        
-        #endregion
-
-       
-        #region Company Commission
-
-        [HttpGet]
-        public ActionResult CompanyCommissions(int companyId)
-        {
-            return PartialView("_CompanyCommissions");
-        }
-
-        #endregion
 
         #region Helper Method
 

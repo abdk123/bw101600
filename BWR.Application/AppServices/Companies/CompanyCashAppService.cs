@@ -23,16 +23,16 @@ namespace BWR.Application.AppServices.Companies
             _appSession = appSession;
         }
 
-        public IList<CompanyBalanceDto> GetCompanyCashs(int companyId)
+        public IList<CompanyCashesDto> GetCompanyCashs(int companyId)
         {
-            IList<CompanyBalanceDto> companyBalanceDtos = new List<CompanyBalanceDto>();
+            IList<CompanyCashesDto> companyBalanceDtos = new List<CompanyCashesDto>();
 
             try
             {
                 var companyCashs = _unitOfWork.GenericRepository<CompanyCash>().FindBy(x => x.CompanyId == companyId).ToList();
                 foreach(var companyCash in companyCashs)
                 {
-                    var companyBalanceDto = new CompanyBalanceDto()
+                    var companyBalanceDto = new CompanyCashesDto()
                     {
                         Id= companyCash.Id,
                         CoinId = companyCash.CoinId,
@@ -118,13 +118,13 @@ namespace BWR.Application.AppServices.Companies
             return companyCashDto;
         }
 
-        public CompanyCashDto UpdateBalance(CompanyBalanceDto dto)
+        public CompanyCashDto UpdateBalance(CompanyCashesDto dto)
         {
             CompanyCashDto companyCashDto = null;
             try
             {
                 var companyCash = _unitOfWork.GenericRepository<CompanyCash>().GetById(dto.Id);
-                Mapper.Map<CompanyBalanceDto, CompanyCash>(dto, companyCash);
+                Mapper.Map<CompanyCashesDto, CompanyCash>(dto, companyCash);
                 companyCash.ModifiedBy = _appSession.GetUserName();
                 //_unitOfWork.CreateTransaction();
 

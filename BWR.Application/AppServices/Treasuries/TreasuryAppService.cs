@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using BWR.Application.Dtos.Branch;
 using BWR.Application.Dtos.Treasury;
 using BWR.Application.Interfaces.Shared;
 using BWR.Application.Interfaces.Treasury;
@@ -43,6 +44,34 @@ namespace BWR.Application.AppServices.Treasuries
             return treasuriesDtos;
         }
 
+        public IList<TreasurysDto> GetAllWithBalances()
+        {
+            var treasuriesDtos = new List<TreasurysDto>();
+            try
+            {
+                var treasuries = _unitOfWork.GenericRepository<Treasury>().GetAll().ToList();
+                if (treasuries.Any())
+                {
+                    treasuriesDtos = (from t in treasuries
+                                      select new TreasurysDto()
+                                      {
+                                          Id = t.Id,
+                                          IsAvilable = t.IsAvilable,
+                                          IsEnabled = t.IsEnabled,
+                                          Name = t.Name,
+                                          Balances = GetTreasuryCashesForDto(t.TreasuryCashes),
+                                      }).ToList();
+                }
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return treasuriesDtos;
+        }
+
+
         public TreasuryDto GetById(int id)
         {
             TreasuryDto treasuryDto = null;
@@ -62,7 +91,6 @@ namespace BWR.Application.AppServices.Treasuries
 
             return treasuryDto;
         }
-
 
         public TreasuryUpdateDto GetForEdit(int id)
         {
@@ -90,8 +118,9 @@ namespace BWR.Application.AppServices.Treasuries
             try
             {
                 var treasury = Mapper.Map<TreasuryInsertDto, Treasury>(dto);
-                //treasury.CreatedBy = _appSession.GetUserName();
+                treasury.BranchId = BranchHelper.Id;
                 treasury.IsEnabled = true;
+                treasury.IsAvilable = true;
                 _unitOfWork.CreateTransaction();
 
                 _unitOfWork.GenericRepository<Treasury>().Insert(treasury);
@@ -177,5 +206,23 @@ namespace BWR.Application.AppServices.Treasuries
 
             return false;
         }
+
+
+        private string GetTreasuryCashesForDto(IList<TreasuryCash> treasuryCashes)
+        {
+            var balance = "";
+            foreach (var treasuryCash in treasuryCashes)
+            {
+                var total = treasuryCash.Total;
+                var coinName = treasuryCash.Coin != null ? treasuryCash.Coin.Name : string.Empty;
+                if (total != 0)
+                {
+                    balance += $"{total} {coinName} <br /> ";
+                }
+            }
+            return balance;
+        }
+
     }
+
 }

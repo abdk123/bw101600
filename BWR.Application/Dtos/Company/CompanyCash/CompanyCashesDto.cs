@@ -3,7 +3,7 @@ using BWR.Application.Common;
 
 namespace BWR.Application.Dtos.Company
 {
-    public class CompanyBalanceDto:EntityDto
+    public class CompanyCashesDto:EntityDto
     {
         public decimal InitialBalance { get; set; }
         public decimal Total { get; set; }

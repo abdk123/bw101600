@@ -89,5 +89,17 @@ namespace BWR.Domain.Model.Transactions
         public virtual TypeOfPay TypeOfPay { get; set; }
 
         public virtual IList<MoenyAction> MoenyActions { get; set; }
+
+        public string FormatingAmount
+        {
+            get
+            {
+                string commaNumer = String.Format("{0:N}", Amount);
+                var split = commaNumer.Split('.');
+                var afterDot = Convert.ToInt32(split[1]);
+
+                return afterDot == 0 ? split[0] : commaNumer;
+            }
+        }
     }
 }

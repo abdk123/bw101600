@@ -32,5 +32,7 @@ namespace BWR.Domain.Model.Companies
         public Guid UserMatched { get; set; }
         [ForeignKey("UserMatched")]
         public virtual User User { get; set; }
+
+        
     }
 }

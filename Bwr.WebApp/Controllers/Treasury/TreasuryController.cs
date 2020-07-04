@@ -48,7 +48,7 @@ namespace Bwr.WebApp.Controllers
         {
             try
             {
-                var treasuries = _treasuryAppService.GetAll().AsQueryable();
+                var treasuries = _treasuryAppService.GetAllWithBalances().AsQueryable();
 
                 var totalCount = treasuries.Count();
 
@@ -180,7 +180,7 @@ namespace Bwr.WebApp.Controllers
 
         #region Helper Method
 
-        private IQueryable<TreasuryDto> SearchAndSort(IDataTablesRequest requestModel, IQueryable<TreasuryDto> query)
+        private IQueryable<TreasurysDto> SearchAndSort(IDataTablesRequest requestModel, IQueryable<TreasurysDto> query)
         {
             // Apply filters
             if (requestModel.Search.Value != string.Empty)

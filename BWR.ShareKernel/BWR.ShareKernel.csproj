@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DomainService.cs" />
     <Compile Include="Common\Entity.cs" />
     <Compile Include="Exceptions\BwrException.cs" />
     <Compile Include="Interfaces\IAggregateRoot.cs" />

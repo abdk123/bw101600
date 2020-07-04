@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Bwr.WebApp.Controllers.Company
+namespace Bwr.WebApp.Controllers
 {
     public class CompanyCountryController : Controller
     {

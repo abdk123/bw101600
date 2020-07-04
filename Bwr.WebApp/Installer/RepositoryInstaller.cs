@@ -22,6 +22,9 @@ using BWR.Application.AppServices.Security;
 using BWR.Application.Interfaces.Client;
 using BWR.Application.AppServices.Clients;
 using BWR.Application.Interfaces.Branch;
+using BWR.Application.Interfaces.CompanyCashFlow;
+using BWR.Application.AppServices.Treasuries;
+using BWR.Application.Interfaces.Treasury;
 
 namespace Bwr.WebApp.Installer
 {
@@ -59,9 +62,13 @@ namespace Bwr.WebApp.Installer
             container.Register(Component.For<IClientPhoneAppService>().ImplementedBy<ClientPhoneAppService>().LifestyleTransient());
             container.Register(Component.For<IBranchCommissionAppService>().ImplementedBy<BranchCommissionAppService>().LifestyleTransient());
             container.Register(Component.For<ICompanyCommissionAppService>().ImplementedBy<CompanyCommissionAppService>().LifestyleTransient());
+            container.Register(Component.For<ICompanyCashFlowAppService>().ImplementedBy<CompanyCashFlowAppService>().LifestyleTransient());
+            container.Register(Component.For<ITreasuryAppService>().ImplementedBy<TreasuryAppService>().LifestyleTransient());
+            container.Register(Component.For<ITreasuryCashAppService>().ImplementedBy<TreasuryCashAppService>().LifestyleTransient());
+            container.Register(Component.For<IBranchCashAppService>().ImplementedBy<BranchCashAppService>().LifestyleTransient());
 
 
-
+            //
 
         }
     }

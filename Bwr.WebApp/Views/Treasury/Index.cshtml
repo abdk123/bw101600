@@ -67,11 +67,12 @@
 
                         },
                         'columns': [
-                            { 'title': 'اسم الصندوق', 'data': 'Name', "width": "35%",'searchable': true },
+                            { 'title': 'اسم الصندوق', 'data': 'Name', "width": "25%", 'searchable': true },
+                            { 'title': 'الرصيد', 'data': 'Balances', "width": "30%", 'searchable': true },
                             {
                                 'title': 'هل هو فعال',
                                 'data': "IsEnabled",
-                                'width': "35%",
+                                'width': "20%",
                                 render: function (data, type, row) {
                                     if (type === 'display') {
                                         return getCheckBox(data);

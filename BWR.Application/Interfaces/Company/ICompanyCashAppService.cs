@@ -7,9 +7,9 @@ namespace BWR.Application.Interfaces.Company
 {
     public interface ICompanyCashAppService
     {
-        IList<CompanyBalanceDto> GetCompanyCashs(int companyId);
+        IList<CompanyCashesDto> GetCompanyCashs(int companyId);
         CompanyCashDto Insert(CompanyCashDto dto);
         CompanyCashDto Update(CompanyCashDto dto);
-        CompanyCashDto UpdateBalance(CompanyBalanceDto dto);
+        CompanyCashDto UpdateBalance(CompanyCashesDto dto);
     }
 }

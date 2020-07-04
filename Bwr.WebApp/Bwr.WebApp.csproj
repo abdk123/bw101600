@@ -168,9 +168,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StartupAuth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BranchCommissionController.cs" />
+    <Compile Include="Controllers\Branch\BranchCashController.cs" />
+    <Compile Include="Controllers\Branch\BranchCommissionController.cs" />
     <Compile Include="Controllers\BwrController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\Company\CompanyCashController.cs" />
+    <Compile Include="Controllers\Company\CompanyCashFlowController.cs" />
     <Compile Include="Controllers\Company\CompanyCommissionController.cs" />
     <Compile Include="Controllers\Company\CompanyController.cs" />
     <Compile Include="Controllers\Company\CompanyCountryController.cs" />
@@ -185,7 +188,7 @@
     <Compile Include="Controllers\Setting\PublicExpenseController.cs" />
     <Compile Include="Controllers\Setting\PublicIncomeController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
-    <Compile Include="Controllers\TreasuryController.cs" />
+    <Compile Include="Controllers\Treasury\TreasuryController.cs" />
     <Compile Include="Extensions\EntityExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -6395,7 +6398,6 @@
     <Content Include="Views\Role\_Permissions.cshtml" />
     <Content Include="Views\User\_AssignRolesToUser.cshtml" />
     <Content Include="Views\Company\_CountryCompany.cshtml" />
-    <Content Include="Views\Company\_CompanyCash.cshtml" />
     <Content Include="Views\Client\Index.cshtml" />
     <Content Include="Views\Client\_CreateClient.cshtml" />
     <Content Include="Views\Client\_DeleteClient.cshtml" />
@@ -6416,12 +6418,14 @@
     <Content Include="Views\CompanyCountry\Index.cshtml" />
     <Content Include="Views\CompanyCommission\_EditCompanyCommission.cshtml" />
     <Content Include="Views\CompanyCommission\_DeleteCompanyCommission.cshtml" />
+    <Content Include="Views\CompanyCashFlow\Index.cshtml" />
+    <Content Include="Views\CompanyCash\Index.cshtml" />
+    <Content Include="Views\BranchCash\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\apps\img\" />
     <Folder Include="Content\assets\global\plugins\angularjs\plugins\angular-file-upload\uploads\" />
-    <Folder Include="Views\CompnyCountry\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

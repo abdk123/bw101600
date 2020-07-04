@@ -25,6 +25,7 @@ using BWR.Application.Dtos.Treasury;
 using BWR.Domain.Model.Treasures;
 using BWR.Application.Dtos.Company.CompanyCommission;
 using BWR.Application.Common;
+using BWR.Application.Dtos.Company.CompanyCashFlow;
 
 namespace Bwr.WebApp
 {
@@ -61,7 +62,7 @@ namespace Bwr.WebApp
             Mapper.CreateMap<CompanyCash, CompanyCashDto>();
             Mapper.CreateMap<CompanyCash, CompanyCashUpdateDto>();
             Mapper.CreateMap<CompanyCashUpdateDto, CompanyCash>();
-            Mapper.CreateMap<CompanyCash, CompanyBalanceDto>()
+            Mapper.CreateMap<CompanyCash, CompanyCashesDto>()
                 .ForMember(x => x.ForHim, x => x.Ignore())
                 .ForMember(x => x.OnHim, x => x.Ignore());
 
@@ -72,8 +73,8 @@ namespace Bwr.WebApp
             Mapper.CreateMap<CompanyInsertDto, Company>();
             Mapper.CreateMap<CompanyUpdateDto, Company>();
             Mapper.CreateMap<Company, CompanyUpdateDto>();
-            Mapper.CreateMap<CompanyBalanceDto, CompanyCash>();
-            Mapper.CreateMap<CompanyCash, CompanyBalanceDto>();
+            Mapper.CreateMap<CompanyCashesDto, CompanyCash>();
+            Mapper.CreateMap<CompanyCash, CompanyCashesDto>();
 
             //PublicIncome
             Mapper.CreateMap<PublicIncome, PublicIncomeDto>();
@@ -147,6 +148,10 @@ namespace Bwr.WebApp
                 .ForMember(x => x.Branch, x => x.Ignore());
             Mapper.CreateMap<BranchCommission, BranchCommissionUpdateDto>();
 
+            //BranchCash
+            Mapper.CreateMap<BranchCashInsertDto, BranchCash>();
+            Mapper.CreateMap<BranchCash, BranchCashDto>();
+
             //TreasuryCash
             Mapper.CreateMap<TreasuryCashDto, TreasuryCash>();
             Mapper.CreateMap<TreasuryCash, TreasuryCashDto>();
@@ -170,6 +175,12 @@ namespace Bwr.WebApp
             Mapper.CreateMap<CompanyCountryDto, CompanyCountry>();
             Mapper.CreateMap<CompanyCountry, CompanyCountryDto>();
             Mapper.CreateMap<CompanyCountry, DtoForDropdown>();
+
+            //CompanyCashFlow
+            Mapper.CreateMap<CompanyCashFlowDto, CompanyCashFlow>();
+            Mapper.CreateMap<CompanyCashFlowDto, CompanyCashFlow>();
+            Mapper.CreateMap<CompanyCashFlowOutputDto, CompanyCashFlow>();
+            Mapper.CreateMap<CompanyCashFlow, CompanyCashFlowOutputDto>();
         }
     }
 

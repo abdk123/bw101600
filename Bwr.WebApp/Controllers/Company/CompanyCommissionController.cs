@@ -1,16 +1,12 @@
 ﻿using BWR.Application.Common;
-using BWR.Application.Dtos.Company;
 using BWR.Application.Dtos.Company.CompanyCommission;
 using BWR.Application.Interfaces.Company;
 using BWR.Infrastructure.Exceptions;
 using BWR.ShareKernel.Exceptions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace Bwr.WebApp.Controllers.Company
+namespace Bwr.WebApp.Controllers
 {
     public class CompanyCommissionController : Controller
     {

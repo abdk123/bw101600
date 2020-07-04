@@ -156,7 +156,7 @@
 
                 for (var j = 0; j < selectedCoin.length; j++) {
                     if (selectedCoin[j].CoinId == coins[i].Id) {
-                        ele += '<input  type="number" data-coin-id="' + coins[i].Id + '"data-comp-coin-id="' + selectedCoin[j].Id + '" class="form-control e-coins-inputs" value="' + selectedCoin[j].InitialBalance + '" />';
+                        ele += '<input  type="number" data-coin-id="' + coins[i].Id + '"data-comp-coin-id="' + selectedCoin[j].Id + '" class="form-control e-coins-inputs" value="' + selectedCoin[j].Total + '" />';
                     }
                 }
                 ele +='<span class="input-group-addon">' + coins[i].Code + '</span>' +

@@ -37,7 +37,7 @@
                                     <a href="#currentBalance" data-toggle="tab" aria-expanded="true">الرصيد الحالي</a>
                                 </li>
                                 <li class="">
-                                    <a href="#CompanyCash" data-url="@Url.Action("CountryCash","Company")?companyId=@Model.Id" data-toggle="tab" aria-expanded="false">تهيئة العملات </a>
+                                    <a href="#companyCash" data-url="@Url.Action("Index","CompanyCash")?companyId=@Model.Id" data-toggle="tab" aria-expanded="false">تهيئة العملات </a>
                                 </li>
                                 <li class="">
                                     <a href="#country" data-url="@Url.Action("Index","CompanyCountry")?companyId=@Model.Id" data-toggle="tab" aria-expanded="false">تهيئة المناطق</a>
@@ -46,7 +46,7 @@
                                     <a href="#comission" data-url="@Url.Action("Index","CompanyCommission")?companyId=@Model.Id" data-toggle="tab">تهيئة العمولة</a>
                                 </li>
                                 <li>
-                                    <a href="#cashFlow" data-toggle="tab">كشف حساب الصندوق </a>
+                                    <a href="#cashFlow" data-url="@Url.Action("Index","CompanyCashFlow")?companyId=@Model.Id" data-toggle="tab">كشف حساب الصندوق </a>
                                 </li>
                             </ul>
                         </div>
@@ -71,7 +71,7 @@
 
                                 </div>
                                 
-                                <div class="tab-pane" id="CompanyCash">
+                                <div class="tab-pane" id="companyCash">
                                     
                                 </div>
                                 
@@ -83,73 +83,8 @@
                                     
                                 </div>
 
-
-
                                 <div class="tab-pane" id="cashFlow">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <label>اختر العملة</label>
-                                            <select class="form-control" id="coinCashFlow" onchange="fillCompanyCashFlowTable()">Coin </select>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label>من تاريخ</label>
-                                            <input type="date" class="form-control" id="fromCashFlow" />
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label>إلى تاريخ</label>
-                                            <input type="date" class="form-control" id="toCashFlow" />
-                                        </div>
-                                    </div>
-                                    <table class="table table-striped table-bordered table-hover dt-responsive"
-                                           width="100%" id="cashFlowTable" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    مطابقة
-                                                </th>
-                                                <th>
-                                                    الرصيد
-                                                </th>
-                                                <th>
-                                                    له
-                                                </th>
-                                                <th>
-                                                    عليه
-                                                </th>
-                                                <th>
-                                                    العمولة
-                                                </th>
-                                                <th>
-                                                    العمولة الثانية
-                                                </th>
-                                                <th>
-                                                    التاريخ
-                                                </th>
-                                                <th>
-                                                    اسم المستفيد
-                                                </th>
-                                                <th>
-                                                    اسم المرسل
-                                                </th>
-                                                <th>
-                                                    الجهة
-                                                </th>
-                                                <th>
-                                                    النوع
-                                                </th>
-                                                <th>
-                                                    الرقم
-                                                </th>
-                                                <th>
-                                                    الملاحظات
-                                                </th>
-                                                <th>
-                                                    تفاصيل
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -195,7 +130,7 @@
                         'language': dataTableLocalizationArValue(),
 
                         'ajax': {
-                            'url': '@Url.Action("GetCompanyBalance", "Company")',
+                            'url': '@Url.Action("GetCompanyBalance", "CompanyCash")',
                             method: 'POST',
                             data: {'companyId': companyId}
                         },
