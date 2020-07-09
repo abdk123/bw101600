@@ -15,7 +15,7 @@ namespace BWR.Domain.Model.Transactions
     {
         public Transaction()
         {
-            MoenyActions = new List<MoenyAction>();
+            MoenyActions = new List<MoneyAction>();
         }
         
         public string Note { get; set; }
@@ -88,7 +88,7 @@ namespace BWR.Domain.Model.Transactions
         [ForeignKey("TypeOfPayId")]
         public virtual TypeOfPay TypeOfPay { get; set; }
 
-        public virtual IList<MoenyAction> MoenyActions { get; set; }
+        public virtual IList<MoneyAction> MoenyActions { get; set; }
 
         public string FormatingAmount
         {

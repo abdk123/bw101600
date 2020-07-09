@@ -21,7 +21,7 @@ namespace BWR.Domain.Model.Branches
 
         public int MonyActionId { get; set; }
         [ForeignKey("MonyActionId")]
-        public virtual MoenyAction MoenyAction { get; set; }
+        public virtual MoneyAction MoenyAction { get; set; }
 
         public int TreasuryId { get; set; }
         [ForeignKey("TreasuryId")]

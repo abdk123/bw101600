@@ -25,6 +25,11 @@ using BWR.Application.Interfaces.Branch;
 using BWR.Application.Interfaces.CompanyCashFlow;
 using BWR.Application.AppServices.Treasuries;
 using BWR.Application.Interfaces.Treasury;
+using BWR.Application.Interfaces.TreasuryMoneyAction;
+using BWR.Application.Interfaces.Common;
+using BWR.Application.AppServices.Common;
+using BWR.Application.Interfaces.Transaction;
+using BWR.Application.AppServices.Transactions;
 
 namespace Bwr.WebApp.Installer
 {
@@ -57,6 +62,7 @@ namespace Bwr.WebApp.Installer
             container.Register(Component.For<IRoleAppService>().ImplementedBy<RoleAppService>().LifestyleTransient());
             container.Register(Component.For<IUserAppService>().ImplementedBy<UserAppService>().LifestyleTransient());
             container.Register(Component.For<IPermissionAppService>().ImplementedBy<PermissionAppService>().LifestyleTransient());
+            container.Register(Component.For<IMoneyActionAppService>().ImplementedBy<MoneyActionAppService>().LifestyleTransient());
             container.Register(Component.For<IClientAppService>().ImplementedBy<ClientAppService>().LifestyleTransient());
             container.Register(Component.For<IClientCashAppService>().ImplementedBy<ClientCashAppService>().LifestyleTransient());
             container.Register(Component.For<IClientPhoneAppService>().ImplementedBy<ClientPhoneAppService>().LifestyleTransient());
@@ -66,6 +72,9 @@ namespace Bwr.WebApp.Installer
             container.Register(Component.For<ITreasuryAppService>().ImplementedBy<TreasuryAppService>().LifestyleTransient());
             container.Register(Component.For<ITreasuryCashAppService>().ImplementedBy<TreasuryCashAppService>().LifestyleTransient());
             container.Register(Component.For<IBranchCashAppService>().ImplementedBy<BranchCashAppService>().LifestyleTransient());
+            container.Register(Component.For<ITreasuryMoneyActionAppService>().ImplementedBy<TreasuryMoneyActionAppService>().LifestyleTransient());
+            container.Register(Component.For<IOuterTransactionAppService>().ImplementedBy<OuterTransactionAppService>().LifestyleTransient());
+            container.Register(Component.For<IInnerTransactionAppService>().ImplementedBy<InnerTransactionAppService>().LifestyleTransient());
 
 
             //

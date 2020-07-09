@@ -9,7 +9,7 @@ namespace BWR.Application.Interfaces.Treasury
 {
     public interface ITreasuryCashAppService
     {
-        //IList<TreasuryCashDto> GetTreasuryCashes(int companyId);
+        IList<TreasuryCashDto> GetTreasuryCashes(int treasuryId);
         TreasuryCashDto Insert(TreasuryCashDto dto);
         TreasuryCashDto Update(TreasuryCashDto dto);
     }

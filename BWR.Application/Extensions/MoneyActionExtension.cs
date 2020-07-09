@@ -12,7 +12,7 @@ namespace BWR.Application.Extensions
 {
     public static class MoneyActionExtension
     {
-        public static decimal? OurCommission(this MoenyAction moneyAction)
+        public static decimal? OurCommission(this MoneyAction moneyAction)
         {
             if (moneyAction.Transaction != null)
             {
@@ -21,7 +21,7 @@ namespace BWR.Application.Extensions
             return null;
         }
 
-        public static int? GetActionId(this MoenyAction moneyAction)
+        public static int? GetActionId(this MoneyAction moneyAction)
         {
             if (moneyAction.TransactionId != null)
                 return (int)moneyAction.TransactionId;
@@ -37,7 +37,7 @@ namespace BWR.Application.Extensions
             return -1;
         }
 
-        public static string GetNote(this MoenyAction moneyAction, Requester requester, int? objectId)
+        public static string GetNote(this MoneyAction moneyAction, Requester requester, int? objectId)
         {
             if (moneyAction.TransactionId != null)
                 return moneyAction.Transaction.Note;
@@ -53,7 +53,7 @@ namespace BWR.Application.Extensions
             return "GetNoteMoenyAction";
         }
 
-        public static decimal Comission(this MoenyAction moneyAction, int companyId)
+        public static decimal Comission(this MoneyAction moneyAction, int companyId)
         {
             if (moneyAction.Transaction != null)
             {
@@ -62,7 +62,7 @@ namespace BWR.Application.Extensions
             return 0;
         }
 
-        public static decimal SecounCompanyCommission(this MoenyAction moneyAction, int companyId)
+        public static decimal SecounCompanyCommission(this MoneyAction moneyAction, int companyId)
         {
             if (moneyAction.Transaction != null)
             {
@@ -71,7 +71,7 @@ namespace BWR.Application.Extensions
             return 0;
         }
 
-        public static decimal ClientComission(this MoenyAction moneyAction, int clientId)
+        public static decimal ClientComission(this MoneyAction moneyAction, int clientId)
         {
             if (moneyAction.Transaction != null)
             {
@@ -80,21 +80,21 @@ namespace BWR.Application.Extensions
             return 0;
         }
 
-        public static string ReciverName(this MoenyAction moneyAction)
+        public static string ReciverName(this MoneyAction moneyAction)
         {
             if (moneyAction.TransactionId != null)
                 return moneyAction.Transaction.ReceiverName();
             return "";
         }
 
-        public static string SenderName(this MoenyAction moneyAction)
+        public static string SenderName(this MoneyAction moneyAction)
         {
             if (moneyAction.TransactionId != null)
                 return moneyAction.Transaction.SenderName();
             return "";
         }
 
-        public static string CountryName(this MoenyAction moneyAction)
+        public static string CountryName(this MoneyAction moneyAction)
         {
             if (moneyAction.Transaction != null)
                 if (moneyAction.Transaction.Country != null)
@@ -102,7 +102,7 @@ namespace BWR.Application.Extensions
             return "";
         }
 
-        public static string GetDate(this MoenyAction moneyAction)
+        public static string GetDate(this MoneyAction moneyAction)
         {
             if (moneyAction.Transaction != null)
             {
@@ -117,7 +117,7 @@ namespace BWR.Application.Extensions
             return moneyAction.Created.Value.ToString("dd/MM/yyyy", new CultureInfo("ar-AE"));
         }
 
-        public static string CreateBy(this MoenyAction moneyAction)
+        public static string CreateBy(this MoneyAction moneyAction)
         {
             if (moneyAction.Transaction != null)
             {
@@ -126,7 +126,7 @@ namespace BWR.Application.Extensions
             return moneyAction.CreatedBy;
         }
 
-        public static string GetTypeName(this MoenyAction moneyAction,Requester requester, int? objectId)
+        public static string GetTypeName(this MoneyAction moneyAction,Requester requester, int? objectId)
         {
             if (moneyAction.TransactionId != null)
                 return moneyAction.Transaction.GetTypeName(requester, objectId);

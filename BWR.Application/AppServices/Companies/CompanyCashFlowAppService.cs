@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BWR.Application.Dtos.Company.CompanyCashFlow;
 using BWR.Application.Extensions;
+using BWR.Application.Interfaces.Common;
 using BWR.Application.Interfaces.CompanyCashFlow;
 using BWR.Application.Interfaces.Shared;
 using BWR.Domain.Model.Clients;
@@ -21,11 +22,16 @@ namespace BWR.Application.AppServices.Companies
     public class CompanyCashFlowAppService : ICompanyCashFlowAppService
     {
         private readonly IUnitOfWork<MainContext> _unitOfWork;
+        private readonly IMoneyActionAppService _moneyActionAppService;
         private readonly IAppSession _appSession;
 
-        public CompanyCashFlowAppService(IUnitOfWork<MainContext> unitOfWork, IAppSession appSession)
+        public CompanyCashFlowAppService(
+            IUnitOfWork<MainContext> unitOfWork,
+            IMoneyActionAppService moneyActionAppService,
+            IAppSession appSession)
         {
             _unitOfWork = unitOfWork;
+            _moneyActionAppService = moneyActionAppService;
             _appSession = appSession;
         }
 
@@ -93,7 +99,7 @@ namespace BWR.Application.AppServices.Companies
                                 SenderName = companyCashFlow.SenderName(),
                                 CountryName = companyCashFlow.CountryName(),
                                 Type = companyCashFlow.MoenyAction.GetTypeName(Requester.Company, companyCashFlow.CompanyId),
-                                Name = GetActionName(companyCashFlow.MoenyAction),
+                                Name = _moneyActionAppService.GetActionName(companyCashFlow.MoenyAction),
                                 Number = companyCashFlow.MoenyAction.GetActionId(),
                                 Date = companyCashFlow.Created != null ? companyCashFlow.Created.Value.ToString("dd/MM/yyyy", new CultureInfo("ar-AE")) : string.Empty,
                                 Note = companyCashFlow.MoenyAction.GetNote(Requester.Company, companyCashFlow.CompanyId)
@@ -217,23 +223,6 @@ namespace BWR.Application.AppServices.Companies
             }
         }
 
-        public string GetActionName(MoenyAction moneyAction)
-        {
-            if (moneyAction.Transaction != null && moneyAction.BoxAction == null)
-                return moneyAction.Transaction.GetActionName();
-            if (moneyAction.PublicMoney != null)
-                return moneyAction.PublicMoney.GetActionName();
-            if (moneyAction.BoxAction != null)
-            {
-                if (moneyAction.ClientCashFlows != null && moneyAction.ClientCashFlows.Count > 0)
-                    return new List<ClientCashFlow>(moneyAction.ClientCashFlows)[0].Client.FullName;
-                return new List<CompanyCashFlow>(moneyAction.CompanyCashFlows)[0].CompanyName();
-            }
-            if (moneyAction.Exchange != null)
-            {
-                return _unitOfWork.GenericRepository<Coin>().GetById(moneyAction.Exchange.SecoundCoinId).Name;
-            }
-            return "GetActionName";
-        }
+        
     }
 }

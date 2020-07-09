@@ -88,6 +88,12 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -188,7 +194,11 @@
     <Compile Include="Controllers\Setting\PublicExpenseController.cs" />
     <Compile Include="Controllers\Setting\PublicIncomeController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
+    <Compile Include="Controllers\Transaction\InnerTransactionController.cs" />
+    <Compile Include="Controllers\Transaction\OuterTransactionController.cs" />
+    <Compile Include="Controllers\Treasury\TreasuryCashController.cs" />
     <Compile Include="Controllers\Treasury\TreasuryController.cs" />
+    <Compile Include="Controllers\Treasury\TreasuryMoneyActionController.cs" />
     <Compile Include="Extensions\EntityExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -6421,6 +6431,12 @@
     <Content Include="Views\CompanyCashFlow\Index.cshtml" />
     <Content Include="Views\CompanyCash\Index.cshtml" />
     <Content Include="Views\BranchCash\Index.cshtml" />
+    <Content Include="Views\TreasuryMoneyAction\TreasuryBalance.cshtml" />
+    <Content Include="Views\TreasuryMoneyAction\TreasuryActions.cshtml" />
+    <Content Include="Views\OuterTransaction\Index.cshtml" />
+    <Content Include="Views\InnerTransaction\Index.cshtml" />
+    <Content Include="Views\OuterTransaction\CreateOuterTransaction.cshtml" />
+    <Content Include="Views\OuterTransaction\OuterTransactionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

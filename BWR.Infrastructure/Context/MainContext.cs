@@ -82,7 +82,7 @@ namespace BWR.Infrastructure.Context
         public DbSet<CompanyUser> CompanyUsers { get; set; }
         public DbSet<BoxAction> BoxActions { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-        public DbSet<MoenyAction> MoenyActions { get; set; }
+        public DbSet<MoneyAction> MoenyActions { get; set; }
         public DbSet<PublicExpense> PublicExpenses { get; set; }
         public DbSet<PublicIncome> PublicIncomes { get; set; }
         public DbSet<PublicMoney> PublicMoneys { get; set; }

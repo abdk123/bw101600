@@ -1,0 +1,166 @@
+﻿@model IEnumerable<BWR.Application.Dtos.Transaction.InnerTransaction.InnerTransactionDto>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BlankPageLayout.cshtml";
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Coin.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SenderCompany.Name)
+        </th>
+        <th>@Html.DisplayNameFor(model => model.TypeOfPay.Name)</th>
+        <th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coin.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modlItem => item.Id)
+            </td>
+            <td>
+                @{
+                    var created = item.Created != null ? item.Created.Value.ToShortDateString() : string.Empty;
+                    @created
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modlItem => item.Country.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modlItem => item.SenderCompany.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfPay.Name)
+            </td>
+            <td>
+                <a class="btn purple btn-outline sbold" data-toggle="modal" href="#viewTransaction"
+                   data-tranaction-Id="@item.Id" data-sender-name="@item.SenderClient.FullName"
+                   data-sender-comission="@item.SenderCleirntCommission" data-recivcer-name="@item.ReciverClient.FullName"
+                   data-coin-name="@item.Coin.Name" data-created-date="@created" data-typeof-pay="@item.TypeOfPay.Name">عرض التفاصيل</a>
+            </td>
+        </tr>
+    }
+</table>
+<div class="modal fade bs-modal-lg" id="viewTransaction" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" id="modelTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>اسم المرسل</label>
+                            <input type="text" class="form-control" id="senderName" readonly />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>عمولة المرسل</label>
+                            <input type="text" class="form-control" id="senderClientComission" readonly />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>اسم المستقبل:</label>
+                            <input type="text" class="form-control" id="recsiverClient" readonly />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>عمولة المستقبل:</label>
+                            <input type="text" class="form-control" id="recsiverComission" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>العملة</label>
+                        <input type="text" class="form-control" id="coinName" readonly />
+                    </div>
+                    <div class="col-lg-4">
+                        <label>التاريخ </label>
+                        <input type="text" class="form-control" id="createdDate" readonly />
+                    </div>
+                    <div class="col-lg-4">
+                        <label>طريقة الدفع</label>
+                        <input type="text" class="form-control" id="typOfPay" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn dark btn-outline" data-dismiss="modal">إغلاق</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<script>
+    $(function () {
+
+        $('#viewTransaction').on('show.bs.modal', function (e) {
+
+            var ahref = $(e.relatedTarget);
+            var tranactionId = ahref.data('tranaction-Id');
+
+            var senderName = ahref.data('sender-name');
+            var senderClientComission = ahref.data('sender-comission');
+            var recsiverClient = ahref.data('recivcer-name');
+
+            var coinName = ahref.data('coin-name');
+            var createdDate = ahref.data('created-date');
+            var typeOfpay = ahref.data('typeof-pay');
+
+
+            var model = $(e.currentTarget);
+            model.find('#modelTitle').text('تفاصيل الحوالة رقم ' + tranactionId);
+
+
+            model.find('#senderClientComission').val(senderClientComission);
+            model.find('#senderName').val(senderName);
+            model.find('#recsiverClient').val(recsiverClient);
+
+
+            model.find('#coinName').val(coinName);
+            model.find('#createdDate').val(createdDate);
+            model.find('#typOfPay').val(typeOfpay);
+        });
+
+    });
+</script>
+

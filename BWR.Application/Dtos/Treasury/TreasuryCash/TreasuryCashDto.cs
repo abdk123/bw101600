@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BWR.Application.Dtos.Setting.Coin;
 
 namespace BWR.Application.Dtos.Treasury
 {
@@ -10,9 +6,11 @@ namespace BWR.Application.Dtos.Treasury
     {
         public int Id { get; set; }
         public decimal Total { get; set; }
+        public decimal Amount { get; set; }
         public bool IsEnabled { get; set; }
 
         public int CoinId { get; set; }
+        public CoinDto Coin { get; set; }
         public int TreasuryId { get; set; }
     }
 }

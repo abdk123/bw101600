@@ -26,6 +26,7 @@ using BWR.Domain.Model.Treasures;
 using BWR.Application.Dtos.Company.CompanyCommission;
 using BWR.Application.Common;
 using BWR.Application.Dtos.Company.CompanyCashFlow;
+using BWR.Application.Dtos.Treasury.TreasuryMoneyAction;
 
 namespace Bwr.WebApp
 {
@@ -161,6 +162,11 @@ namespace Bwr.WebApp
             Mapper.CreateMap<TreasuryInsertDto, Treasury>();
             Mapper.CreateMap<TreasuryUpdateDto, Treasury>();
             Mapper.CreateMap<Treasury, TreasuryUpdateDto>();
+
+            //TreasuryMoneyAction
+            Mapper.CreateMap<TreasuryMoneyAction, TreasuryMoneyActionDto>()
+                .ForMember(x => x.Created, x => x.Ignore());
+            //Mapper.CreateMap<TreasuryMoneyActionInputDto, TreasuryMoneyAction>();
 
             //CompanyCommission
             Mapper.CreateMap<CompanyCommission, CompanyCommissionDto>();

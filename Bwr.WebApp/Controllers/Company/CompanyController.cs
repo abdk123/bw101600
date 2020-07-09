@@ -191,7 +191,6 @@ namespace Bwr.WebApp.Controllers
 
         #endregion
 
-
         #region Helper Method
 
         private IQueryable<CompanyDto> SearchAndSort(IDataTablesRequest requestModel, IQueryable<CompanyDto> query)

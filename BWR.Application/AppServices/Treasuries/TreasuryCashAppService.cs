@@ -7,6 +7,8 @@ using BWR.Infrastructure.Context;
 using BWR.Infrastructure.Exceptions;
 using BWR.ShareKernel.Exceptions;
 using BWR.ShareKernel.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BWR.Application.AppServices.Treasuries
 {
@@ -19,6 +21,24 @@ namespace BWR.Application.AppServices.Treasuries
         {
             _unitOfWork = unitOfWork;
             _appSession = appSession;
+        }
+
+        public IList<TreasuryCashDto> GetTreasuryCashes(int treasuryId)
+        {
+            var treasuryCashsDto = new List<TreasuryCashDto>();
+            try
+            {
+                var treasuryCashes = _unitOfWork.GenericRepository<TreasuryCash>()
+                    .FindBy(x => x.TreasuryId == treasuryId).ToList();
+                treasuryCashsDto = Mapper.Map<List<TreasuryCash>, List<TreasuryCashDto>>(treasuryCashes);
+
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return treasuryCashsDto;
         }
 
         public TreasuryCashDto Insert(TreasuryCashDto dto)

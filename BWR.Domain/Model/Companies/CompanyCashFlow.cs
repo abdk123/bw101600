@@ -27,7 +27,7 @@ namespace BWR.Domain.Model.Companies
 
         public int MoneyActionId { get; set; }
         [ForeignKey("MoneyActionId")]
-        public virtual MoenyAction MoenyAction { get; set; }
+        public virtual MoneyAction MoenyAction { get; set; }
 
         public Guid UserMatched { get; set; }
         [ForeignKey("UserMatched")]

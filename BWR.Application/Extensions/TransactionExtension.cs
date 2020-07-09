@@ -101,7 +101,7 @@ namespace BWR.Application.Extensions
 
         public static int MoneyActionId(this Transaction transaction)
         {
-            return new List<MoenyAction>(transaction.MoenyActions)[0].Id;
+            return new List<MoneyAction>(transaction.MoenyActions)[0].Id;
         }
     }
 }

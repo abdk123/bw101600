@@ -177,7 +177,7 @@
                         @*@if (CheckPrivileg(Bwr.WebApp..Enum.Privelieges.sendTransaction))
         {*@
                         <li class="nav-item start ">
-                            <a href="/BwTransactions/create" class="nav-link nav-toggle">
+                            <a href="@Url.Action("CreateOuterTransaction","OuterTransaction")" class="nav-link nav-toggle">
                                 <i class="fa fa-line-chart"></i>
                                 <span class="title">إرسال حوالة صادرة</span>
                             </a>

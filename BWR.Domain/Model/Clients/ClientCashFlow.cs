@@ -23,7 +23,7 @@ namespace BWR.Domain.Model.Clients
 
         public int MoenyActionId { get; set; }
         [ForeignKey("MoenyActionId")]
-        public virtual MoenyAction MoenyAction { get; set; }
+        public virtual MoneyAction MoenyAction { get; set; }
 
         public Guid UserId { get; set; }
         [ForeignKey("UserId")]

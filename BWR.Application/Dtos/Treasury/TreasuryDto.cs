@@ -16,6 +16,8 @@ namespace BWR.Application.Dtos.Treasury
 
         public bool IsAvilable { get; set; }
 
+        public int? BranchId { get; set; }
+
         public IList<TreasuryCashDto> TreasuryCashes { get; set; }
     }
 }

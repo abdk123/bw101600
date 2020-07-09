@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BWR.Domain.Model.Common
 {
-    public class MoenyAction: Entity
+    public class MoneyAction: Entity
     {
-        public MoenyAction()
+        public MoneyAction()
         {
             CompanyCashFlows = new List<CompanyCashFlow>();
             ClientCashFlows = new List<ClientCashFlow>();
