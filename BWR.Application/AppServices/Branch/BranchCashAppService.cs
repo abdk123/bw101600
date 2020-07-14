@@ -42,6 +42,22 @@ namespace BWR.Application.AppServices.Branch
             return branchCashesDto;
         }
 
+        public IList<BranchCashDto> GetForSpecificBranch(int branchId)
+        {
+            var branchCashesDto = new List<BranchCashDto>();
+            try
+            {
+                var branchCashes = _unitOfWork.GenericRepository<BranchCash>().FindBy(x => x.BranchId == branchId).ToList();
+                branchCashesDto = Mapper.Map<List<BranchCash>, List<BranchCashDto>>(branchCashes);
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return branchCashesDto;
+        }
+
         public BranchCashDto Insert(BranchCashInsertDto dto)
         {
             BranchCashDto branchCashDto = null;
@@ -51,9 +67,6 @@ namespace BWR.Application.AppServices.Branch
                 branchCash.CreatedBy = _appSession.GetUserName();
                 branchCash.IsEnabled = true;
                 _unitOfWork.CreateTransaction();
-
-                var branch = _unitOfWork.GenericRepository<Domain.Model.Branches.Branch>().GetAll().FirstOrDefault();
-                branchCash.BranchId = branch.Id;
 
                 _unitOfWork.GenericRepository<BranchCash>().Insert(branchCash);
                 _unitOfWork.Save();

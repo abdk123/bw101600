@@ -20,6 +20,7 @@ namespace Bwr.WebApp.Models.Security
             //int.TryParse(HttpContext.Current.Session["CurrentTreusery"].ToString(), out treasuryId);
             //return treasuryId;
 
+            HttpContext.Current.Session["CurrentTreusery"] = 3;
             return 3;
         }
     }

@@ -50,5 +50,36 @@ namespace Bwr.WebApp.Controllers.Company
 
             return Json(new { Success = _success, Message = _message }, JsonRequestBehavior.AllowGet);
         }
+
+        public decimal GetCompanyBalnce(int companyId, int coinId)
+        {
+            return _companyCashAppService.GetCompanyCashs(companyId).FirstOrDefault(x => x.CoinId == coinId).Total;
+        }
+
+        public ActionResult GetCompanyCashes(int companyId)
+        {
+            var companyCashes = _companyCashAppService.GetCompanyCashs(companyId);
+            return Json(companyCashes);
+        }
+
+        public JsonResult GetCompanyCashesForOther(int companyId)
+        {
+            var companyCashes = _companyCashAppService.GetAll().Where(x => x.CompanyId != companyId).ToList();
+
+            return Json(companyCashes);
+        }
+
+        public JsonResult GetCompanyMaxAndDeptByCoin(int coinId, int companyId)
+        {
+            var companyCash = _companyCashAppService.GetCompanyCashs(companyId).FirstOrDefault(x => x.CoinId == coinId);
+
+            return Json(new
+            {
+                companyCash.MaxCreditor,
+                companyCash.MaxDebit,
+                companyCash.Total
+            });
+        }
+        
     }
 }

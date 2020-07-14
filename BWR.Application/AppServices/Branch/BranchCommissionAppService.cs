@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BWR.Application.Dtos.Branch;
+using BWR.Application.Dtos.Branch.BranchCommission;
 using BWR.Application.Interfaces.Branch;
 using BWR.Application.Interfaces.Shared;
 using BWR.Domain.Model.Branches;
@@ -37,6 +38,34 @@ namespace BWR.Application.AppServices.Branch
             }
 
             return branchCommissionsDto;
+        }
+
+        public decimal CalcComission(BranchCommissionInputDto input)
+        {
+            decimal value = 0;
+
+            try
+            {
+                var branchCommission = _unitOfWork.GenericRepository<BranchCommission>()
+                    .FindBy(x => x.CoinId == input.CoinId &&
+                    x.CountryId == input.CountryId &&
+                    x.BranchId == input.BranchId &&
+                    x.StartRange <= input.Amount &&
+                    (x.EndRange == 0 || input.Amount <= x.EndRange))
+                    .OrderByDescending(x => x.Id).FirstOrDefault();
+
+                if (branchCommission == null)
+                    value = 0;
+                if (branchCommission.Cost != 0)
+                    value = branchCommission.Cost;
+                value = (input.Amount * branchCommission.Ratio) / 100;
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return value;
         }
 
         public BranchCommissionDto GetById(int id)
@@ -148,6 +177,6 @@ namespace BWR.Application.AppServices.Branch
             }
         }
 
-       
+        
     }
 }

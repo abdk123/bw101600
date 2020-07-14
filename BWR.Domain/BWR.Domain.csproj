@@ -84,6 +84,7 @@
     <Compile Include="Model\Settings\Coin.cs" />
     <Compile Include="Model\Settings\Country.cs" />
     <Compile Include="Model\Settings\TypeOfPay.cs" />
+    <Compile Include="Model\Transactions\IncomeTransactionCollection.cs" />
     <Compile Include="Model\Transactions\Transaction.cs" />
     <Compile Include="Model\Transactions\TransactionStatus.cs" />
     <Compile Include="Model\Transactions\TransactionType.cs" />

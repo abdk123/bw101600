@@ -89,12 +89,6 @@ $('#LayoutViewBlance').click(function () {
 });
 
 
-
-
-
-
-
-
 function numberWithCommas(number, bool) {
 
     if (number == null || number === "" || number == "لايوجد" || number == "null" || number == undefined) {

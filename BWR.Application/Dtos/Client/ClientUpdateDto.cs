@@ -10,6 +10,7 @@ namespace BWR.Application.Dtos.Client
         {
             ClientPhones = new List<ClientPhoneDto>();
             ClientCashes = new List<ClientCashDto>();
+            ClientAttatchments = new List<ClientAttatchmentDto>();
         }
 
         [Required(ErrorMessage = "اسم العميل مطلوب")]
@@ -29,5 +30,6 @@ namespace BWR.Application.Dtos.Client
 
         public IList<ClientPhoneDto> ClientPhones { get; set; }
         public IList<ClientCashDto> ClientCashes { get; set; }
+        public IList<ClientAttatchmentDto> ClientAttatchments { get; set; }
     }
 }

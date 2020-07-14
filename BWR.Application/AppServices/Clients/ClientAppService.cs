@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BWR.Application.Dtos.Branch;
 using BWR.Application.Dtos.Client;
 using BWR.Application.Interfaces.Client;
 using BWR.Application.Interfaces.Shared;
@@ -7,8 +8,10 @@ using BWR.Infrastructure.Context;
 using BWR.Infrastructure.Exceptions;
 using BWR.ShareKernel.Exceptions;
 using BWR.ShareKernel.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace BWR.Application.AppServices.Clients
 {
@@ -68,6 +71,23 @@ namespace BWR.Application.AppServices.Clients
         }
 
 
+        public IList<ClientDto> Get(Expression<Func<Client, bool>> predicate)
+        {
+            var clientsDtos = new List<ClientDto>();
+            try
+            {
+                var clients = _unitOfWork.GenericRepository<Client>().FindBy(predicate).ToList();
+                clientsDtos = Mapper.Map<List<Client>, List<ClientDto>>(clients);
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+
+            return clientsDtos;
+        }
+
+
         public ClientUpdateDto GetForEdit(int id)
         {
             ClientUpdateDto clientDto = null;
@@ -98,8 +118,8 @@ namespace BWR.Application.AppServices.Clients
                 var client = Mapper.Map<ClientInsertDto, Client>(dto);
                 client.CreatedBy = _appSession.GetUserName();
                 client.IsEnabled = true;
-                client.ClientType = ClientType.Client;
-                client.BranchId = 2;
+                //client.ClientType = ClientType.Client;
+                client.BranchId = BranchHelper.Id;
 
                 _unitOfWork.GenericRepository<Client>().Insert(client);
                 _unitOfWork.Save();
@@ -235,6 +255,6 @@ namespace BWR.Application.AppServices.Clients
 
         }
 
-
+       
     }
 }

@@ -52,8 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppServices\Branch\BranchCashAppService.cs" />
+    <Compile Include="AppServices\Branch\BranchCashFlowAppService.cs" />
     <Compile Include="AppServices\Branch\BranchCommissionAppService.cs" />
     <Compile Include="AppServices\Clients\ClientAppService.cs" />
+    <Compile Include="AppServices\Clients\ClientAttachmentAppService.cs" />
     <Compile Include="AppServices\Clients\ClientCashAppService.cs" />
     <Compile Include="AppServices\Clients\ClientPhoneAppService.cs" />
     <Compile Include="AppServices\Common\MoneyActionAppService.cs" />
@@ -73,15 +75,18 @@
     <Compile Include="AppServices\Setting\PublicIncomeAppService.cs" />
     <Compile Include="AppServices\Transactions\InnerTransactionAppService.cs" />
     <Compile Include="AppServices\Transactions\OuterTransactionAppService.cs" />
+    <Compile Include="AppServices\Transactions\TransactionAppService.cs" />
     <Compile Include="AppServices\Treasuries\TreasuryAppService.cs" />
     <Compile Include="AppServices\Treasuries\TreasuryCashAppService.cs" />
     <Compile Include="AppServices\Treasuries\TreasuryMoneyActionAppService.cs" />
     <Compile Include="Common\DtoForDropdown.cs" />
     <Compile Include="Common\EntityDto.cs" />
+    <Compile Include="Dtos\Branch\BranchCashFlow\BranchCashFlowDto.cs" />
     <Compile Include="Dtos\Branch\BranchCash\BranchCashDto.cs" />
     <Compile Include="Dtos\Branch\BranchCash\BranchCashInsertDto.cs" />
     <Compile Include="Dtos\Branch\BranchCash\BranchCashIUpdateDto.cs" />
     <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionDto.cs" />
+    <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionInputDto.cs" />
     <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionInsertDto.cs" />
     <Compile Include="Dtos\Branch\BranchCommission\BranchCommissionUpdateDto.cs" />
     <Compile Include="Dtos\Branch\BranchDto.cs" />
@@ -91,6 +96,7 @@
     <Compile Include="Dtos\Client\ClientCashFlowDto.cs" />
     <Compile Include="Dtos\Client\ClientDto.cs" />
     <Compile Include="Dtos\Client\ClientForDropdownDto.cs" />
+    <Compile Include="Dtos\Client\ClientForTransactionDto.cs" />
     <Compile Include="Dtos\Client\ClientInsertDto.cs" />
     <Compile Include="Dtos\Client\ClientPhoneDto.cs" />
     <Compile Include="Dtos\Client\ClientTypeDto.cs" />
@@ -111,6 +117,7 @@
     <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionsDto.cs" />
     <Compile Include="Dtos\Company\CompanyCommission\CompanyCommissionUpdateDto.cs" />
     <Compile Include="Dtos\Company\CompanyCountry\CompanyCountriesDto.cs" />
+    <Compile Include="Dtos\Company\CompanyReceiverDto.cs" />
     <Compile Include="Dtos\Log\LogDto.cs" />
     <Compile Include="Dtos\Log\LogInsertDto.cs" />
     <Compile Include="Dtos\Log\LogUpdateDto.cs" />
@@ -130,11 +137,11 @@
     <Compile Include="Dtos\Setting\Action\ActionForDropdownDto.cs" />
     <Compile Include="Dtos\Setting\Action\ActionInsertDto.cs" />
     <Compile Include="Dtos\Setting\Action\ActionUpdateDto.cs" />
-    <Compile Include="Dtos\Setting\TypeOfPay\TypeOfPayDto.cs" />
-    <Compile Include="Dtos\Setting\TypeOfPay\TypeOfPayForDropdownDto.cs" />
-    <Compile Include="Dtos\Setting\TypeOfPay\TypeOfPayInsertDto.cs" />
-    <Compile Include="Dtos\Setting\TypeOfPay\TypeOfPayUpdateDto.cs" />
     <Compile Include="Dtos\Transaction\InnerTransaction\InnerTransactionDto.cs" />
+    <Compile Include="Dtos\Transaction\InnerTransaction\InnerTransactionInsertDto.cs" />
+    <Compile Include="Dtos\Transaction\InnerTransaction\InnerTransactionInsertInitialDto.cs" />
+    <Compile Include="Dtos\Transaction\InnerTransaction\InnerTransactionInsertListDto.cs" />
+    <Compile Include="Dtos\Transaction\OuterTransaction\OuterTransactionInsertDto.cs" />
     <Compile Include="Dtos\Transaction\OuterTransaction\OuterTransactionInputDto.cs" />
     <Compile Include="Dtos\Transaction\OuterTransaction\OuterTransactionDto.cs" />
     <Compile Include="Dtos\Transaction\OuterTransaction\OuterTransactionInsertInitialDto.cs" />
@@ -171,8 +178,6 @@
     <Compile Include="Dtos\Setting\PublicIncome\IncomeForDropdownDto.cs" />
     <Compile Include="Dtos\Setting\PublicIncome\PublicIncomeInsertDto.cs" />
     <Compile Include="Dtos\Setting\PublicIncome\PublicIncomeUpdateDto.cs" />
-    <Compile Include="Dtos\Transaction\TransactionStatusDto.cs" />
-    <Compile Include="Dtos\Transaction\TransactionTypeDto.cs" />
     <Compile Include="Dtos\Treasury\TreasuryCash\TreasuryCashDto.cs" />
     <Compile Include="Dtos\Treasury\TreasuryDetailDto.cs" />
     <Compile Include="Dtos\Treasury\TreasuryDto.cs" />
@@ -184,14 +189,19 @@
     <Compile Include="Dtos\Treasury\TreasurysDto.cs" />
     <Compile Include="Dtos\Treasury\TreasuryUpdateDto.cs" />
     <Compile Include="Extensions\ClearingExtension.cs" />
+    <Compile Include="Extensions\ClientExtension.cs" />
     <Compile Include="Extensions\CompanyCashFlowExtension.cs" />
+    <Compile Include="Extensions\CompanyExtension.cs" />
     <Compile Include="Extensions\DecimalExtension.cs" />
+    <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\MoneyActionExtension.cs" />
     <Compile Include="Extensions\PublicMoneyExtension.cs" />
     <Compile Include="Extensions\TransactionExtension.cs" />
     <Compile Include="Interfaces\Branch\IBranchCashAppService.cs" />
+    <Compile Include="Interfaces\Branch\IBranchCashFlowAppService.cs" />
     <Compile Include="Interfaces\Branch\IBranchCommissionAppService.cs" />
     <Compile Include="Interfaces\Client\IClientAppService.cs" />
+    <Compile Include="Interfaces\Client\IClientAttatchmentAppService.cs" />
     <Compile Include="Interfaces\Client\IClientCashAppService.cs" />
     <Compile Include="Interfaces\Client\IClientPhoneAppService.cs" />
     <Compile Include="Interfaces\Common\IMoneyActionAppService.cs" />
@@ -215,6 +225,7 @@
     <Compile Include="Interfaces\Shared\IIndexAppService.cs" />
     <Compile Include="Interfaces\Transaction\IInnerTransactionAppService.cs" />
     <Compile Include="Interfaces\Transaction\IOuterTransactionAppService.cs" />
+    <Compile Include="Interfaces\Transaction\ITransactionAppService.cs" />
     <Compile Include="Interfaces\Treasury\ITreasuryAppService.cs" />
     <Compile Include="Interfaces\Treasury\ITreasuryCashAppService.cs" />
     <Compile Include="Interfaces\Treasury\ITreasuryMoneyActionAppService.cs" />

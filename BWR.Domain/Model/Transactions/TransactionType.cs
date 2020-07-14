@@ -2,9 +2,10 @@
 
 namespace BWR.Domain.Model.Transactions
 {
-    public class TransactionType: Entity
+    public enum TransactionType
     {
-        public string Name { get; set; }
-        public bool IsEnabled { get; set; }
+        None = 0,
+        ExportTransaction = 1,
+        ImportTransaction = 2
     }
 }

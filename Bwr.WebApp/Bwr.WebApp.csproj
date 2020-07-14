@@ -175,9 +175,11 @@
     <Compile Include="App_Start\StartupAuth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Branch\BranchCashController.cs" />
+    <Compile Include="Controllers\Branch\BranchCashFlowController.cs" />
     <Compile Include="Controllers\Branch\BranchCommissionController.cs" />
     <Compile Include="Controllers\BwrController.cs" />
-    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\Client\ClientCashController.cs" />
+    <Compile Include="Controllers\Client\ClientController.cs" />
     <Compile Include="Controllers\Company\CompanyCashController.cs" />
     <Compile Include="Controllers\Company\CompanyCashFlowController.cs" />
     <Compile Include="Controllers\Company\CompanyCommissionController.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\Transaction\InnerTransactionController.cs" />
     <Compile Include="Controllers\Transaction\OuterTransactionController.cs" />
+    <Compile Include="Controllers\Transaction\TransactionController.cs" />
     <Compile Include="Controllers\Treasury\TreasuryCashController.cs" />
     <Compile Include="Controllers\Treasury\TreasuryController.cs" />
     <Compile Include="Controllers\Treasury\TreasuryMoneyActionController.cs" />
@@ -6437,11 +6440,15 @@
     <Content Include="Views\InnerTransaction\Index.cshtml" />
     <Content Include="Views\OuterTransaction\CreateOuterTransaction.cshtml" />
     <Content Include="Views\OuterTransaction\OuterTransactionDetails.cshtml" />
+    <Content Include="Views\Transaction\TransactionDontDileverd.cshtml" />
+    <Content Include="Views\Transaction\DileverdTransaction.cshtml" />
+    <Content Include="Views\BranchCashFlow\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\assets\apps\img\" />
     <Folder Include="Content\assets\global\plugins\angularjs\plugins\angular-file-upload\uploads\" />
+    <Folder Include="Views\ClientCash\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -4,10 +4,9 @@ using BWR.Application.Dtos.Client;
 using BWR.Application.Dtos.Company;
 using BWR.Application.Dtos.Setting.Coin;
 using BWR.Application.Dtos.Setting.Country;
-using BWR.Application.Dtos.TransactionStatus;
-using BWR.Application.Dtos.TransactionType;
 using BWR.Application.Dtos.Treasury;
-using BWR.Application.Dtos.TypeOfPay;
+using BWR.Domain.Model.Settings;
+using BWR.Domain.Model.Transactions;
 using System;
 
 namespace BWR.Application.Dtos.Transaction.InnerTransaction
@@ -67,22 +66,15 @@ namespace BWR.Application.Dtos.Transaction.InnerTransaction
         public int? CountryId { get; set; }
         
         public virtual CountryDto Country { get; set; }
-
-        public int TransactionStatusId { get; set; }
         
-        public virtual TransactionStatusDto TransactionsStatus { get; set; }
+        public virtual TransactionStatus TransactionsStatus { get; set; }
 
-
-        public int TransactionTypeId { get; set; }
-        
-        public virtual TransactionTypeDto TransactionType { get; set; }
+        public virtual TransactionType TransactionType { get; set; }
 
         public int TreaseryId { get; set; }
         
         public virtual TreasuryDto Treasury { get; set; }
 
-        public int TypeOfPayId { get; set; }
-        
-        public virtual TypeOfPayDto TypeOfPay { get; set; }
+        public virtual TypeOfPay TypeOfPay { get; set; }
     }
 }

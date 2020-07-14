@@ -81,7 +81,7 @@ namespace BWR.Application.Extensions
 
         public static bool IsOuterTransaction(this Transaction transaction)
         {
-            return transaction.TransactionTypeId == 1;
+            return transaction.TransactionType == TransactionType.ExportTransaction;
 
         }
 
@@ -101,7 +101,7 @@ namespace BWR.Application.Extensions
 
         public static int MoneyActionId(this Transaction transaction)
         {
-            return new List<MoneyAction>(transaction.MoenyActions)[0].Id;
+            return transaction.MoenyActions[0].Id;
         }
     }
 }

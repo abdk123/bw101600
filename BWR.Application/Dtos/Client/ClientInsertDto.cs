@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BWR.Domain.Model.Clients;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BWR.Application.Dtos.Client
@@ -25,6 +26,8 @@ namespace BWR.Application.Dtos.Client
         [Display(Name = "البلد")]
         [Required(ErrorMessage = "اسم البلد مطلوب")]
         public int? CountryId { get; set; }
+
+        public ClientType ClientType { get; set; }
 
         public IList<ClientPhoneDto> ClientPhones { get; set; }
         public IList<ClientCashDto> ClientCashes { get; set; }

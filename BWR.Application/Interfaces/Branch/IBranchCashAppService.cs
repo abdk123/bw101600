@@ -7,6 +7,7 @@ namespace BWR.Application.Interfaces.Branch
     public interface IBranchCashAppService
     {
         IList<BranchCashDto> GetAll();
+        IList<BranchCashDto> GetForSpecificBranch(int branchId);
         BranchCashDto Insert(BranchCashInsertDto dto);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BWR.Application.Dtos.Company;
+using BWR.Application.Extensions;
 using BWR.Application.Interfaces.Company;
 using BWR.Application.Interfaces.Setting;
 using BWR.Infrastructure.Exceptions;
@@ -190,6 +191,46 @@ namespace Bwr.WebApp.Controllers
         }
 
         #endregion
+
+        [HttpPost]
+        public ActionResult GetCompaniesExceptRelatedId(int id)
+        {
+            var companies = _companyAppService.GetAll().Where(x => x.Id != id).Select(c => new { Id = c.Id, Name = c.Name });
+            return Json(companies);
+        }
+
+        public JsonResult CompanyUseCoinInThisCountry(int countryId, int coinId)
+        {
+
+            try
+            {
+                var companies = _companyAppService.GetAll().Where(c => c.HaveCountryById(countryId));
+                List<object> company = new List<object>();
+                foreach (var item in companies)
+                {
+                    company.Add(new
+                    {
+                        id = item.Id,
+                        Name = item.Name,
+                    });
+                }
+                if (company.Count == 0)
+                    return Json("null");
+                return Json(company);
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+                return Json("null");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult CompaniesDontHaveId(int id)
+        {
+            var companies = _companyAppService.GetAll().Where(x => x.Id != id).Select(x => new { Id = x.Id, Name = x.Name });
+            return Json(companies);
+        }
 
         #region Helper Method
 

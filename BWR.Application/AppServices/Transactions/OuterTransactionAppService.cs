@@ -3,7 +3,6 @@ using BWR.Application.Dtos.Client;
 using BWR.Application.Dtos.Setting.Coin;
 using BWR.Application.Dtos.Setting.Country;
 using BWR.Application.Dtos.Transaction.OuterTransaction;
-using BWR.Application.Dtos.TypeOfPay;
 using BWR.Application.Interfaces.Shared;
 using BWR.Application.Interfaces.Transaction;
 using BWR.Domain.Model.Clients;
@@ -18,6 +17,11 @@ using System.Linq;
 using BWR.Application.Dtos.Company;
 using BWR.Application.Dtos.Setting.Attachment;
 using BWR.Domain.Model.Companies;
+using BWR.Application.Dtos.Branch;
+using BWR.Infrastructure.Exceptions;
+using BWR.Domain.Model.Common;
+using System;
+using BWR.Domain.Model.Branches;
 
 namespace BWR.Application.AppServices.Transactions
 {
@@ -40,7 +44,7 @@ namespace BWR.Application.AppServices.Transactions
 
             try
             {
-                var outerTransactions = _unitOfWork.GenericRepository<Transaction>().FindBy(x => x.TransactionTypeId == 1);
+                var outerTransactions = _unitOfWork.GenericRepository<Transaction>().FindBy(x => x.TransactionType == TransactionType.ExportTransaction);
 
                 if (input.CoinId != null)
                 {
@@ -88,7 +92,7 @@ namespace BWR.Application.AppServices.Transactions
             {
                 var outerTransaction = _unitOfWork.GenericRepository<Transaction>().GetById(id);
 
-                if (outerTransaction != null && outerTransaction.TransactionTypeId != 2)
+                if (outerTransaction != null && outerTransaction.TransactionType != TransactionType.ImportTransaction)
                 {
                     outerTransactionDto = Mapper.Map<Transaction, OuterTransactionDto>(outerTransaction);
                 }
@@ -115,9 +119,6 @@ namespace BWR.Application.AppServices.Transactions
             var agents = _unitOfWork.GenericRepository<Client>().FindBy(x => x.ClientType == ClientType.Client)
                 .Select(x => new ClientDto() { Id = x.Id, FullName = x.FullName , IsEnabled = x.IsEnabled }).ToList();
 
-            var typeOfPays = _unitOfWork.GenericRepository<TypeOfPay>().GetAll()
-                .Select(x => new TypeOfPayDto() { Id = x.Id, Name = x.Name }).ToList();
-
             var companies = _unitOfWork.GenericRepository<Company>().GetAll()
                 .Select(x => new CompanyForDropdownDto() { Id = x.Id, Name = x.Name }).ToList();
 
@@ -130,7 +131,6 @@ namespace BWR.Application.AppServices.Transactions
                 Countries = countries,
                 Agents = agents,
                 Clients = clients,
-                TypeOfPays = typeOfPays,
                 TreasuryId = currentTreasuryId,
                 Companies = companies,
                 Attachments = attachments
@@ -138,5 +138,460 @@ namespace BWR.Application.AppServices.Transactions
 
             return outerTransactionInsertInputDto;
         }
+
+        public OuterTransactionDto OuterClientTransaction(OuterTransactionInsertDto dto)
+        {
+            OuterTransactionDto outerTransactionDto = null;
+            try
+            {
+                _unitOfWork.CreateTransaction();
+
+                var outerTransaction = Mapper.Map<OuterTransactionInsertDto, Transaction>(dto);
+                outerTransaction.ReceiverBranchId = BranchHelper.Id;
+                outerTransaction.TreaseryId = _appSession.GetCurrentTreasuryId();
+                outerTransaction.TransactionsStatus = TransactionStatus.None;
+                outerTransaction.TransactionType = TransactionType.ExportTransaction;
+                outerTransaction.TypeOfPay = TypeOfPay.Cash;
+                outerTransaction.CreatedBy = _appSession.GetUserName();
+
+                _unitOfWork.GenericRepository<Transaction>().Insert(outerTransaction);
+
+                
+                #region Money Action
+                var moneyAction = new MoneyAction()
+                {
+                    //TransactionId = outerTransaction.Id,
+                    Transaction = outerTransaction,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<MoneyAction>().Insert(moneyAction);
+                #endregion
+
+                #region Branch Cash
+                var branchCash = _unitOfWork.GenericRepository<BranchCash>().FindBy(x => x.BranchId == BranchHelper.Id && x.CoinId == dto.CoinId).FirstOrDefault();
+                branchCash.Total += dto.Amount + dto.OurComission;
+                branchCash.ModifiedBy = _appSession.GetUserName();
+                _unitOfWork.GenericRepository<BranchCash>().Update(branchCash);
+
+                #endregion
+
+                #region Branch Cash Flow
+                var branchCashFlow = new BranchCashFlow()
+                {
+                    BranchId = BranchHelper.Id,
+                    CreatedBy = _appSession.GetUserName(),
+                    MoenyAction = moneyAction,
+                    TreasuryId = _appSession.GetCurrentTreasuryId(),
+                    CoinId = dto.CoinId,
+                    Amount = dto.Amount + dto.OurComission,
+                    Total = branchCash.Total
+                };
+
+                _unitOfWork.GenericRepository<BranchCashFlow>().Insert(branchCashFlow);
+                #endregion
+
+                #region Company Cash
+                var companyCash = _unitOfWork.GenericRepository<CompanyCash>().FindBy(x => x.CompanyId == dto.SenderCompanyId && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (companyCash != null)
+                {
+                    companyCash.Total += dto.Amount + dto.SenderCompanyComission.Value;
+                    companyCash.ModifiedBy = _appSession.GetUserName();
+                    _unitOfWork.GenericRepository<CompanyCash>().Update(companyCash);
+                }
+
+                #endregion
+
+                #region Company Cash Flow
+                var companyCashFlow = new CompanyCashFlow()
+                {
+                    CreatedBy = _appSession.GetUserName(),
+                    CompanyId = dto.SenderCompanyId.Value,
+                    MoenyAction = moneyAction,
+                    CoinId = dto.CoinId,
+                    Amount = dto.Amount + dto.SenderCompanyComission.Value,
+                    Total = companyCash.Total,
+                    Matched = false
+                };
+
+                _unitOfWork.GenericRepository<CompanyCashFlow>().Insert(companyCashFlow);
+                #endregion
+
+                
+
+                #region Treasury Cash
+                var treasuryCash = _unitOfWork.GenericRepository<TreasuryCash>().FindBy(x => x.TreasuryId == _appSession.GetCurrentTreasuryId() && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (treasuryCash != null)
+                {
+                    treasuryCash.Total += dto.Amount + dto.OurComission;
+                }
+                _unitOfWork.GenericRepository<TreasuryCash>().Update(treasuryCash);
+
+                #endregion
+
+                #region Treasury Money Action
+                var truseryMoneyAction = new TreasuryMoneyAction()
+                {
+                    Total = treasuryCash.Total,
+                    Amount = dto.Amount + dto.OurComission,
+                    TreasuryId = _appSession.GetCurrentTreasuryId(),
+                    CoinId = dto.CoinId,
+                    BranchCashFlow = branchCashFlow,
+                };
+
+                _unitOfWork.GenericRepository<TreasuryMoneyAction>().Insert(truseryMoneyAction);
+
+                #endregion
+
+                _unitOfWork.Save();
+                _unitOfWork.Commit();
+
+                
+                outerTransactionDto = Mapper.Map<Transaction, OuterTransactionDto>(outerTransaction);
+
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+                _unitOfWork.Rollback();
+            }
+            return outerTransactionDto;
+        }
+
+        public OuterTransactionDto OuterAgentTransaction(OuterTransactionInsertDto dto)
+        {
+            OuterTransactionDto outerTransactionDto = null;
+            try
+            {
+                _unitOfWork.CreateTransaction();
+
+                var outerTransaction = Mapper.Map<OuterTransactionInsertDto, Transaction>(dto);
+                outerTransaction.ReceiverBranchId = BranchHelper.Id;
+                outerTransaction.TreaseryId = _appSession.GetCurrentTreasuryId();
+                outerTransaction.TransactionsStatus = TransactionStatus.None;
+                outerTransaction.TransactionType = TransactionType.ExportTransaction;
+                outerTransaction.TypeOfPay = TypeOfPay.ClientsReceivables;
+                outerTransaction.CreatedBy = _appSession.GetUserName();
+
+                _unitOfWork.GenericRepository<Transaction>().Insert(outerTransaction);
+
+
+                #region Money Action
+                var moneyAction = new MoneyAction()
+                {
+                    //TransactionId = outerTransaction.Id,
+                    Transaction = outerTransaction,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<MoneyAction>().Insert(moneyAction);
+                #endregion
+
+                #region Branch Cash
+                var branchCash = _unitOfWork.GenericRepository<BranchCash>().FindBy(x => x.BranchId == BranchHelper.Id && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (branchCash != null)
+                {
+                    branchCash.Total += dto.Amount + dto.OurComission;
+                    branchCash.ModifiedBy = _appSession.GetUserName();
+                    _unitOfWork.GenericRepository<BranchCash>().Update(branchCash);
+                }
+
+                #endregion
+
+                #region Branch Cash Flow
+                var branchCashFlow = new BranchCashFlow()
+                {
+                    BranchId = BranchHelper.Id,
+                    CreatedBy = _appSession.GetUserName(),
+                    MoenyAction = moneyAction,
+                    TreasuryId = _appSession.GetCurrentTreasuryId(),
+                    CoinId = dto.CoinId,
+                    Amount = dto.Amount + dto.OurComission,
+                    Total = branchCash.Total
+                };
+
+                _unitOfWork.GenericRepository<BranchCashFlow>().Insert(branchCashFlow);
+                #endregion
+
+                #region Company Cash
+                var companyCash = _unitOfWork.GenericRepository<CompanyCash>().FindBy(x => x.CompanyId == dto.SenderCompanyId && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (companyCash != null)
+                {
+                    companyCash.Total += dto.Amount + dto.SenderCompanyComission.Value;
+                    companyCash.ModifiedBy = _appSession.GetUserName();
+                    _unitOfWork.GenericRepository<CompanyCash>().Update(companyCash);
+                }
+
+                #endregion
+
+                #region Company Cash Flow
+                var companyCashFlow = new CompanyCashFlow()
+                {
+                    CreatedBy = _appSession.GetUserName(),
+                    CompanyId = dto.SenderCompanyId.Value,
+                    MoenyAction = moneyAction,
+                    CoinId = dto.CoinId,
+                    Amount = dto.Amount+dto.SenderCompanyComission.Value,
+                    Total = companyCash.Total,
+                    Matched = false
+                };
+
+                _unitOfWork.GenericRepository<CompanyCashFlow>().Insert(companyCashFlow);
+                #endregion
+
+                #region Client Cash
+                var clientCash = _unitOfWork.GenericRepository<ClientCash>().FindBy(x => x.ClientId == dto.SenderClientId && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (clientCash != null)
+                {
+                    clientCash.Total -= dto.Amount + dto.OurComission;
+                    if (dto.SenderCompanyComission != null && dto.SenderCompanyComission != 0)
+                        clientCash.Total += (decimal)dto.SenderCompanyComission;
+                    clientCash.ModifiedBy = _appSession.GetUserName();
+                }
+                _unitOfWork.GenericRepository<ClientCash>().Update(clientCash);
+
+                #endregion
+
+                #region Client Cash Flow
+                var clientCashFlow = new ClientCashFlow()
+                {
+                    ClientId=dto.SenderClientId.Value,
+                    Total = clientCash.Total,
+                    MoenyAction = moneyAction,
+                    CoinId = dto.CoinId,
+                    Matched = false,
+                    CreatedBy=_appSession.GetUserName(),
+                };
+
+                clientCashFlow.Amount -= dto.Amount;
+                if (dto.SenderCleirntCommission!=null && dto.SenderCleirntCommission != 0)
+                {
+                    clientCashFlow.Amount += dto.SenderCleirntCommission.Value;
+                }
+                _unitOfWork.GenericRepository<ClientCashFlow>().Insert(clientCashFlow);
+
+                #endregion
+
+                _unitOfWork.Save();
+                _unitOfWork.Commit();
+
+                if (dto.RecivingAmount != null && dto.RecivingAmount != 0)
+                {
+                    bool response = ReciveFromClientForMainBoxMethond(outerTransaction.Id, dto.SenderClientId.Value, dto.CoinId, (decimal)dto.RecivingAmount, dto.Note);
+                    if (!response)
+                    {
+                        return outerTransactionDto;
+                    }
+                }
+
+
+                outerTransactionDto = Mapper.Map<Transaction, OuterTransactionDto>(outerTransaction);
+
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+                _unitOfWork.Rollback();
+            }
+            return outerTransactionDto;
+        }
+
+        public OuterTransactionDto OuterCompanyTranasction(OuterTransactionInsertDto dto)
+        {
+            OuterTransactionDto outerTransactionDto = null;
+            try
+            {
+                _unitOfWork.CreateTransaction();
+
+                var outerTransaction = Mapper.Map<OuterTransactionInsertDto, Transaction>(dto);
+                outerTransaction.ReceiverBranchId = BranchHelper.Id;
+                outerTransaction.TreaseryId = _appSession.GetCurrentTreasuryId();
+                outerTransaction.TransactionsStatus = TransactionStatus.None;
+                outerTransaction.TransactionType = TransactionType.ExportTransaction;
+                outerTransaction.TypeOfPay = TypeOfPay.CompaniesReceivables;
+                outerTransaction.CreatedBy = _appSession.GetUserName();
+                _unitOfWork.GenericRepository<Transaction>().Insert(outerTransaction);
+
+
+                #region Money Action
+                var moneyAction = new MoneyAction()
+                {
+                    //TransactionId = outerTransaction.Id,
+                    Transaction = outerTransaction,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<MoneyAction>().Insert(moneyAction);
+                #endregion
+
+                #region Sender Company Cash
+                var senderCompanyCash = _unitOfWork.GenericRepository<CompanyCash>().FindBy(x => x.CompanyId == dto.SenderCompanyId && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (senderCompanyCash != null)
+                {
+                    senderCompanyCash.Total += dto.Amount + dto.SenderCompanyComission.Value;
+                    senderCompanyCash.ModifiedBy = _appSession.GetUserName();
+                    _unitOfWork.GenericRepository<CompanyCash>().Update(senderCompanyCash);
+                }
+
+                #endregion
+
+                #region Sender Company Cash Flow
+                var senderCompanyCashFlow = new CompanyCashFlow()
+                {
+                    CreatedBy = _appSession.GetUserName(),
+                    CompanyId = dto.SenderCompanyId.Value,
+                    MoenyAction = moneyAction,
+                    CoinId = dto.CoinId,
+                    Amount = dto.Amount + dto.SenderCompanyComission.Value,
+                    Total = senderCompanyCash.Total,
+                    Matched = false
+                };
+
+                _unitOfWork.GenericRepository<CompanyCashFlow>().Insert(senderCompanyCashFlow);
+                #endregion
+
+
+                #region Receiver Company Cash
+                var receiverCompanyCash = _unitOfWork.GenericRepository<CompanyCash>().FindBy(x => x.CompanyId == dto.ReceiverCompanyId && x.CoinId == dto.CoinId).FirstOrDefault();
+                if (receiverCompanyCash != null)
+                {
+                    receiverCompanyCash.Total -= dto.Amount;
+                    receiverCompanyCash.Total -= dto.OurComission;
+                    receiverCompanyCash.Total += dto.ReceiverCompanyComission.Value;
+                    receiverCompanyCash.ModifiedBy = _appSession.GetUserName();
+                    _unitOfWork.GenericRepository<CompanyCash>().Update(receiverCompanyCash);
+                }
+
+                #endregion
+
+                #region Receiver Company Cash Flow
+                var receiverCompanyCashFlow = new CompanyCashFlow()
+                {
+                    CreatedBy = _appSession.GetUserName(),
+                    CompanyId = dto.ReceiverCompanyId.Value,
+                    MoenyAction = moneyAction,
+                    CoinId = dto.CoinId,
+                    Amount = (dto.Amount + dto.OurComission) * -1,
+                    Total = receiverCompanyCash.Total,
+                    Matched = false
+                };
+
+                receiverCompanyCashFlow.Amount += dto.ReceiverCompanyComission.Value;
+                _unitOfWork.GenericRepository<CompanyCashFlow>().Insert(receiverCompanyCashFlow);
+                #endregion
+
+
+                _unitOfWork.Save();
+                _unitOfWork.Commit();
+
+                if (dto.RecivingAmount != null && dto.RecivingAmount != 0)
+                {
+                    bool response = ReciveFromClientForMainBoxMethond(outerTransaction.Id, dto.SenderClientId.Value, dto.CoinId, (decimal)dto.RecivingAmount, dto.Note);
+                    if (!response)
+                    {
+                        return outerTransactionDto;
+                    }
+                }
+
+
+                outerTransactionDto = Mapper.Map<Transaction, OuterTransactionDto>(outerTransaction);
+
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+                _unitOfWork.Rollback();
+            }
+            return outerTransactionDto;
+        }
+
+        public bool ReciveFromClientForMainBoxMethond(int transactionId, int clientId, int coinId, decimal amount, string note = "")
+        {
+            try
+            {
+                _unitOfWork.CreateTransaction();
+                var branchId = BranchHelper.Id;
+                var treasuryId = _appSession.GetCurrentTreasuryId();
+                var branchCash = _unitOfWork.GenericRepository<BranchCash>().FindBy(c => c.BranchId == branchId && c.CoinId == coinId).FirstOrDefault();
+                var boxAction = new BoxAction()
+                {
+                    Amount = amount,
+                    IsIncmoe = true,
+                    CoinId = coinId,
+                    Note = note,
+                    CreatedBy = _appSession.GetUserName()
+                };
+                _unitOfWork.GenericRepository<BoxAction>().Insert(boxAction);
+                var moneyAction = new MoneyAction()
+                {
+                    BoxActionsId = boxAction.Id,
+                    TransactionId = transactionId,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<MoneyAction>().Insert(moneyAction);
+                branchCash.Total += amount;
+                branchCash.ModifiedBy = _appSession.GetUserName();
+                _unitOfWork.GenericRepository<BranchCash>().Update(branchCash);
+
+                var branchCashFlow = new BranchCashFlow()
+                {
+                    BranchId = branchId,
+                    CoinId = coinId,
+                    Total = branchCash.Total,
+                    Amount = amount,
+                    MonyActionId = moneyAction.Id,
+                    TreasuryId = treasuryId,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<BranchCashFlow>().Insert(branchCashFlow);
+
+                var treuseryCash = _unitOfWork.GenericRepository<TreasuryCash>().FindBy(c => c.CoinId == coinId && c.TreasuryId == treasuryId).FirstOrDefault();
+                treuseryCash.Total += amount;
+                treuseryCash.ModifiedBy = _appSession.GetUserName();
+                _unitOfWork.GenericRepository<TreasuryCash>().Update(treuseryCash);
+                var treasuryMoneyAction = new TreasuryMoneyAction()
+                {
+                    BranchCashFlowId = branchCashFlow.Id,
+                    CoinId = coinId,
+                    Total = treuseryCash.Total,
+                    TreasuryId = treasuryId,
+                    Amount = amount,
+                    CreatedBy = _appSession.GetUserName()
+                };
+                _unitOfWork.GenericRepository<TreasuryMoneyAction>().Insert(treasuryMoneyAction);
+                var clientCash = _unitOfWork.GenericRepository<ClientCash>().FindBy(c => c.ClientId == clientId && c.CoinId == coinId).First();
+                clientCash.Total += amount;
+                clientCash.ModifiedBy = _appSession.GetUserName();
+                _unitOfWork.GenericRepository<ClientCash>().Update(clientCash);
+
+
+                var clientCashFlow = new ClientCashFlow()
+                {
+                    CoinId = coinId,
+                    ClientId = clientId,
+                    Total = clientCash.Total,
+                    Amount = amount,
+                    MoenyActionId = moneyAction.Id,
+                    Matched = false,
+                    CreatedBy = _appSession.GetUserName()
+                };
+
+                _unitOfWork.GenericRepository<ClientCashFlow>().Insert(clientCashFlow);
+
+                _unitOfWork.Save();
+                _unitOfWork.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.Rollback();
+                return false;
+            }
+        }
+
+
+
     }
 }

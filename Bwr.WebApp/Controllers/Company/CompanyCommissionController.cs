@@ -11,6 +11,7 @@ namespace Bwr.WebApp.Controllers
     public class CompanyCommissionController : Controller
     {
         private readonly ICompanyCommissionAppService _companyCommissionAppService;
+        private readonly ICompanyCountryAppService _companyCountryAppService;
         private string _message;
         private bool _success;
 
@@ -19,6 +20,7 @@ namespace Bwr.WebApp.Controllers
             ICompanyCountryAppService companyCountryAppService)
         {
             _companyCommissionAppService = companyCommissionAppService;
+            _companyCountryAppService = companyCountryAppService;
             _message = "";
             _success = false;
         }
@@ -144,6 +146,24 @@ namespace Bwr.WebApp.Controllers
             _companyCommissionAppService.Delete(dto.Id.Value);
 
             return Content("success");
+        }
+
+        public decimal? CalcComission(int companyId, int countryId, int coinId, decimal amount)
+        {
+            var companyCountry = _companyCountryAppService.GetCountriesForCompany(companyId).FirstOrDefault(x => x.CountryId == countryId);
+            if (companyCountry == null)
+            {
+                return 0;
+            }
+            var companyCountryId = companyCountry.Id;
+            var companyComission=_companyCommissionAppService.GetByCompanyId(companyId)
+                .Where(c => c.CompanyCountryId == companyCountryId && c.CoinId == coinId && c.StartRange <= amount && (c.EndRange == null || amount <= c.EndRange)).OrderByDescending(c => c.Id).FirstOrDefault();
+            
+            if (companyComission == null)
+                return 0;
+            if (companyComission.Cost != 0)
+                return companyComission.Cost;
+            return (amount * companyComission.Ratio) / 100;
         }
     }
 }

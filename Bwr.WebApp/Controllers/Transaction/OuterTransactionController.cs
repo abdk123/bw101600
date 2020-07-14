@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using BWR.Application.Interfaces.Common;
 using BWR.Application.Interfaces.Setting;
 using PagedList;
+using System.Collections.Generic;
+using BWR.Domain.Model.Settings;
 
 namespace Bwr.WebApp.Controllers.Transaction
 {
@@ -17,6 +19,8 @@ namespace Bwr.WebApp.Controllers.Transaction
         private readonly ICountryAppService _countryAppService;
         private readonly IMoneyActionAppService _moneyActionAppService;
         private readonly IAppSession _appSession;
+        private string _message;
+        private bool _success;
 
         public OuterTransactionController(
             IOuterTransactionAppService outerTransactionAppService,
@@ -31,10 +35,12 @@ namespace Bwr.WebApp.Controllers.Transaction
             _countryAppService = countryAppService;
             _moneyActionAppService = moneyActionAppService;
             _appSession = appSession;
+            _message = "";
+            _success = false;
         }
         
         // GET: OuterTransaction
-        public ActionResult Index(int? typeOfPay, int? coinId, int? countryId, int? receiverClientId, int? senderClientId, DateTime? from, DateTime? to, int? page)
+        public ActionResult Index(TypeOfPay typeOfPay, int? coinId, int? countryId, int? receiverClientId, int? senderClientId, DateTime? from, DateTime? to, int? page)
         {
             var outerTransactionInputDto = new OuterTransactionInputDto()
             {
@@ -44,7 +50,7 @@ namespace Bwr.WebApp.Controllers.Transaction
                 ReceiverClientId = receiverClientId,
                 SenderClientId = senderClientId,
                 To = to,
-                TypeOfPayId = typeOfPay
+                TypeOfPay = typeOfPay
             };
 
             var outerTransactionsDto = _outerTransactionAppService.GetTransactions(outerTransactionInputDto).ToPagedList(page ?? 1, 10);
@@ -88,5 +94,81 @@ namespace Bwr.WebApp.Controllers.Transaction
             return View(outerTransaction);
         }
 
+        [HttpPost]
+        public ActionResult OuterClientTransaction(OuterTransactionInsertDto input)
+        {
+            try
+            {
+                var outerTransactionDto = _outerTransactionAppService.OuterClientTransaction(input);
+                if (outerTransactionDto != null)
+                    _success = true;
+                else
+                {
+                    _success = false;
+                    _message = "حدثت مشكلة اثناء الحفظ";
+                }
+            }
+            catch (Exception ex)
+            {
+                _success = false;
+                _message = "حدثت مشكلة اثناء الحفظ";
+            }
+
+            return Json(new { Success = _success, Message = _message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult OuterAgentTransaction(OuterTransactionInsertDto input)
+        {
+            try
+            {
+                var outerTransactionDto = _outerTransactionAppService.OuterAgentTransaction(input);
+                if (outerTransactionDto != null)
+                    _success = true;
+                else
+                {
+                    _success = false;
+                    _message = "حدثت مشكلة اثناء الحفظ";
+                }
+            }
+            catch (Exception ex)
+            {
+                _success = false;
+                _message = "حدثت مشكلة اثناء الحفظ";
+            }
+
+            return Json(new { Success = _success, Message = _message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult OuterCompanyTranasction(OuterTransactionInsertDto input)
+        {
+            try
+            {
+                var outerTransactionDto = _outerTransactionAppService.OuterCompanyTranasction(input);
+                if (outerTransactionDto != null)
+                    _success = true;
+                else
+                {
+                    _success = false;
+                    _message = "حدثت مشكلة اثناء الحفظ";
+                }
+            }
+            catch (Exception ex)
+            {
+                _success = false;
+                _message = "حدثت مشكلة اثناء الحفظ";
+            }
+
+            return Json(new { Success = _success, Message = _message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult InitialOuterTransactionData()
+        {
+            var initialData = _outerTransactionAppService.InitialInputData();
+
+            return Json(initialData);
+        }
     }
 }

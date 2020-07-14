@@ -184,6 +184,8 @@ namespace Bwr.WebApp.Controllers.Setting
 
         #endregion
 
+        
+
         #region Helper Method
 
         private IQueryable<CoinDto> SearchAndSort(IDataTablesRequest requestModel, IQueryable<CoinDto> query)

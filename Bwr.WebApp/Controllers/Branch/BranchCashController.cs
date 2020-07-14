@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BWR.Application.Dtos.Branch;
 using BWR.Application.Interfaces.Branch;
 using BWR.Domain.Model.Branches;
 
@@ -28,9 +29,16 @@ namespace Bwr.WebApp.Controllers.Setting
             return Json(new { data = branchCaches }, JsonRequestBehavior.AllowGet);
         }
 
-        //public ActionResult Edit(IList<BranchCash> branchCashes)
-        //{
+        public ActionResult GetForBranch()
+        {
+            var branchCaches = _branchCashAppService.GetForSpecificBranch(BranchHelper.Id);
 
-        //}
+            return Json(branchCaches);
+        }
+
+        public bool ChecekIfTherIsMaincoin()
+        {
+            return _branchCashAppService.GetAll().Any(c => c.IsMainCoin);
+        }
     }
 }

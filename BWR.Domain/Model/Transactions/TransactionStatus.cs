@@ -2,9 +2,11 @@
 
 namespace BWR.Domain.Model.Transactions
 {
-    public class TransactionStatus: Entity
+    public enum TransactionStatus
     {
-        public string Name { get; set; }
-        public bool IsEnabled { get; set; }
+        _0 = 0,
+        Notified = 1,
+        NotNotified = 2,
+        None=3
     }
 }

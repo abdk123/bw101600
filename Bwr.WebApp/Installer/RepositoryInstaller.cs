@@ -30,6 +30,8 @@ using BWR.Application.Interfaces.Common;
 using BWR.Application.AppServices.Common;
 using BWR.Application.Interfaces.Transaction;
 using BWR.Application.AppServices.Transactions;
+using BWR.Application.Interfaces.BranchCashFlow;
+using BWR.Application.AppServices.Branches;
 
 namespace Bwr.WebApp.Installer
 {
@@ -75,6 +77,8 @@ namespace Bwr.WebApp.Installer
             container.Register(Component.For<ITreasuryMoneyActionAppService>().ImplementedBy<TreasuryMoneyActionAppService>().LifestyleTransient());
             container.Register(Component.For<IOuterTransactionAppService>().ImplementedBy<OuterTransactionAppService>().LifestyleTransient());
             container.Register(Component.For<IInnerTransactionAppService>().ImplementedBy<InnerTransactionAppService>().LifestyleTransient());
+            container.Register(Component.For<IClientAttatchmentAppService>().ImplementedBy<ClientAttatchmentAppService>().LifestyleTransient());
+            container.Register(Component.For<IBranchCashFlowAppService>().ImplementedBy<BranchCashFlowAppService>().LifestyleTransient());
 
 
             //

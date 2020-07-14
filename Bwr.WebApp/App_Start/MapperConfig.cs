@@ -119,7 +119,7 @@ namespace Bwr.WebApp
             Mapper.CreateMap<CoinUpdateDto, Coin>();
             Mapper.CreateMap<Coin, CoinUpdateDto>();
 
-            //ClientClientUpdateDto
+            //Client
             Mapper.CreateMap<Client, ClientDto>();
             Mapper.CreateMap<ClientInsertDto, Client>();
             Mapper.CreateMap<ClientUpdateDto, Client>()
@@ -136,6 +136,7 @@ namespace Bwr.WebApp
             Mapper.CreateMap<ClientAttatchmentDto, ClientAttatchment>();
             Mapper.CreateMap<TransactionDto, Transaction>();
             Mapper.CreateMap<Transaction, TransactionDto>();
+            Mapper.CreateMap<ClientDto, ClientUpdateDto>();
 
             //Branch
             Mapper.CreateMap<Branch, BranchDto>();

@@ -25,6 +25,9 @@ namespace BWR.Domain.Model.Transactions
         public bool? Deliverd { get; set; }
         public decimal? RecivingAmount { get; set; }
         public DateTime? DeliverdDate { get; set; }
+        public virtual TypeOfPay TypeOfPay { get; set; }
+        public virtual TransactionStatus TransactionsStatus { get; set; }
+        public virtual TransactionType TransactionType { get; set; }
 
         #region Sender Info
         public int? SenderBranchId { get; set; }
@@ -71,22 +74,13 @@ namespace BWR.Domain.Model.Transactions
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
 
-        public int TransactionStatusId { get; set; }
-        [ForeignKey("TransactionStatusId")]
-        public virtual TransactionStatus TransactionsStatus { get; set; }
-
-        
-        public int TransactionTypeId { get; set; }
-        [ForeignKey("TransactionTypeId")]
-        public virtual TransactionType TransactionType { get; set; }
-
         public int TreaseryId { get; set; }
         [ForeignKey("TreaseryId")]
         public virtual Treasury Treasury { get; set; }
 
-        public int TypeOfPayId { get; set; }
-        [ForeignKey("TypeOfPayId")]
-        public virtual TypeOfPay TypeOfPay { get; set; }
+        public int? IncomeTransactionCollectionId { get; set; }
+        [ForeignKey("IncomeTransactionCollectionId")]
+        public virtual IncomeTransactionCollection IncomeTransactionCollection { get; set; }
 
         public virtual IList<MoneyAction> MoenyActions { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BWR.Application.Dtos.Branch;
 using BWR.Application.Dtos.Setting.Coin;
+using BWR.Application.Interfaces.Branch;
 using BWR.Application.Interfaces.Setting;
 using BWR.Application.Interfaces.Shared;
 using BWR.Domain.Model.Settings;
@@ -15,11 +17,15 @@ namespace BWR.Application.AppServices.Setting
     public class CoinAppService : ICoinAppService
     {
         private readonly IUnitOfWork<MainContext> _unitOfWork;
+        private readonly IBranchCashAppService _branchCashAppService;
         private readonly IAppSession _appSession;
 
-        public CoinAppService(IUnitOfWork<MainContext> unitOfWork, IAppSession appSession)
+        public CoinAppService(IUnitOfWork<MainContext> unitOfWork,
+            IBranchCashAppService branchCashAppService,
+            IAppSession appSession)
         {
             _unitOfWork = unitOfWork;
+            _branchCashAppService = branchCashAppService;
             _appSession = appSession;
         }
 
@@ -111,6 +117,15 @@ namespace BWR.Application.AppServices.Setting
                 _unitOfWork.Commit();
 
                 coinDto = Mapper.Map<Coin, CoinDto>(coin);
+
+                var branchCashInsertDto = new BranchCashInsertDto()
+                {
+                    CoinId = coinDto.Id.Value,
+                    BranchId = BranchHelper.Id
+
+                };
+                _branchCashAppService.Insert(branchCashInsertDto);
+
             }
             catch (BwrException ex)
             {

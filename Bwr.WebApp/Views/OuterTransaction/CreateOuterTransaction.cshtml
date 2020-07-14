@@ -25,10 +25,10 @@
             <div class="portlet-body form">
                 <div class="row">
                     <div class="col-lg-4">
-                        @Html.DropDownListFor(model => model.Countries, null, " الوجهة", htmlAttributes: new { @class = "form-control", @id = "countryId" })
+                        @Html.DropDownListFor(model => model.Countries, new SelectList(Model.Countries,"Id","Name"), " الوجهة", htmlAttributes: new { @class = "form-control", @id = "countryId" })
                     </div>
                     <div class="col-lg-4">
-                        @Html.DropDownListFor(model => model.Coins, null, " العملة", htmlAttributes: new { @class = "form-control", @id = "CoinId" })
+                        @Html.DropDownListFor(model => model.Coins, new SelectList(Model.Coins, "Id", "Name"), " العملة", htmlAttributes: new { @class = "form-control", @id = "CoinId" })
                     </div>
                     <div class="col-lg-4">
                         <select class="form-control" id="sendByCompanySelect"></select>
@@ -64,7 +64,13 @@
             <div class="portlet-body form">
                 <div class="row" style="margin-bottom:10px">
                     <div class="col-lg-12">
-                        @Html.DropDownListFor(model => model.TypeOfPays, new SelectList(Model.TypeOfPays, "Id","Name"), htmlAttributes: new { @class = "form-control", @id = "TypeOfPay" })
+                        
+                        <select id="TypeOfPay" class="form-control">
+                            <option value="0" index="0"></option>
+                            <option value="1" >نقدي</option>
+                            <option value="2" >ذمم عملاء</option>
+                            <option value="3" >ذمم شركات</option>
+                        </select>
                     </div>
                 </div>
                 <div id="normalClient">
@@ -73,7 +79,7 @@
                             <select class="form-control" id="clientSelect">
                                 <option value="" selected>المرسل</option>
                                 @{
-                                    var clinets = ViewBag.Clients;
+                                    var clinets = Model.Clients;
                                     foreach (var item in clinets)
                                     {
                                         <option value="@item.Id"> @item.FullName </option>
@@ -257,7 +263,6 @@
                                 {
                                     <option value="@item.Id"> @item.FullName </option>
                                 }
-
                             }
                         </select>
 
@@ -292,7 +297,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        @Html.DropDownList("Attachment", null, "نوع المرفق", htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("Attachment", new SelectList(Model.Attachments,"Id","Name"), "نوع المرفق", htmlAttributes: new { @class = "form-control" })
                     </div>
                     <div class="col-lg-6">
                         <select class="form-control" name="cameraSource" id="normalClientCmeraSource"></select>
@@ -370,7 +375,7 @@
         $('#reciverCompanyCurrentBalance').text('');
         $('#reciverCompanyCurrentBalanceStatus').text('');
         $.post(
-            'GetCompanyMaxAndDeptByCoin', {
+            '@Url.Action("GetCompanyMaxAndDeptByCoin","CompanyCash")', {
                 coinId: coinId,
                 companyId: $(this).val(),
             }, function (data) {
@@ -403,7 +408,7 @@
         var reciverPhone = document.getElementById('reciverPhone');
         if (!isNaN($(this).val())) {
             $.post(
-                'GetClientInformation', {
+                '@Url.Action("GetClientById", "Client")', {
                     clientId: $(this).val()
                 },
                 function (data) {
@@ -452,7 +457,7 @@
         }
         var coinId = $('#CoinId').val();
         $.post(
-            'GetCompanyBalnce', {
+            '@Url.Action("GetCompanyBalnce", "CompanyCash")', {
                 companyId: this.value,
                 coinId: coinId
             },
@@ -472,7 +477,7 @@
             }
         )
         $.post(
-            'GetCompanyMaxAndDeptByCoin', {
+            '@Url.Action("GetCompanyMaxAndDeptByCoin","CompanyCash")', {
                 coinId: coinId,
                 companyId: this.value
             }, function (data) {
@@ -489,7 +494,7 @@
         mainOption.innerText = "الرجاء اختيار الشركة";
 
         $.post(
-            '_JSNOCompanyDontHaveId', {
+            '@Url.Action("GetCompaniesExceptRelatedId", "Company")', {
                 id: companyId
             }, function (data) {
                 reciverCompany.innerHTML = "";
@@ -523,9 +528,9 @@
         if (CoinId.value != "") {
             if (countryId.value != "") {
                 $.post(
-                    '_JSONCompanyUseCoinInThisCountry', {
+                    '@Url.Action("CompanyUseCoinInThisCountry", "Company")', {
                         countryId: countryId.value,
-                        CoinId: CoinId.value
+                        coinId: CoinId.value
                     },
                     function (data) {
                         if (data === "null") {
@@ -551,6 +556,7 @@
         }
     }
     $('#CoinId').change(function () {
+        debugger;
         clearAgentBalance();
         FillCompanySelect();
         GetAgentBalance();
@@ -560,7 +566,7 @@
     $('#clientSelect').change(function () {
         if (!isNaN($(this).val())) {
             $.post(
-                'GetClientImage', {
+                '@Url.Action("GetClientImage", "Client")', {
                     clientId: $(this).val()
                 },
                 function (data) {
@@ -754,6 +760,7 @@
         return true;
     }
     function CallcRequierdMoney() {
+        debugger;
         var TypeOfPayId = document.getElementById('TypeOfPay');
         var transactionAmount = document.getElementById('transactionAmount');
         var comission = document.getElementById('comission');
@@ -916,7 +923,7 @@
                     }
                 }
                 $.ajax({
-                    url: "/BwTransactions/AddNewClient",
+                    url: '@Url.Action("AddNewClientFroTransaction", "Client")',
                     type: "post",
                     data: formData,
                     processData: false,
@@ -957,7 +964,7 @@
                         formData.append("imageType", Attachment.value);
                         formData.append("clientId", senderClientId);
                         $.ajax({
-                            url: "UpdateOldClientImage",
+                            url: '@Url.Action("UpdateClientImage", "Client")',
                             type: "post",
                             data: formData,
                             processData: false,
@@ -970,7 +977,7 @@
                     }
                 }
                 $.post(
-                    'CheckNumberForSender', {
+                    '@Url.Action("UpdatePhoneNumberIfNotExist", "Client")', {
                         clientId: senderClientId,
                         phone: senderPhone.value
                     }
@@ -986,7 +993,7 @@
                 formData.append('Phone', reciverPhone.value);
                 formData.append('address', reciverAddress.value);
                 $.ajax({
-                    url: "AddNewClient",
+                    url: '@Url.Action("AddNewClientFroTransaction", "Client")',
                     method: "post",
                     data: formData,
                     processData: false,
@@ -1004,7 +1011,7 @@
             else {
                 ReciverID = reciverClientSelect.value;
                 $.post(
-                    'CheckAddressAndNumberForReciver', {
+                    '@Url.Action("UpdateAddressAndPhoneNumberIfNotExist", "Client")', {
                         clientId: ReciverID,
                         phone: reciverPhone.value,
                         address: reciverAddress.value
@@ -1013,17 +1020,17 @@
 
 
             $.post(
-                'OuterClientTransaction', {
-                    countryId: CountryId.value,
-                    coinId: CoinId.value,
-                    companyId: sendByCompanySelect.value,
-                    amount: deleteCommaFromNumber(transactionAmount.value),
-                    comission: deleteCommaFromNumber(comission.value),
-                    comapnyComission: deleteCommaFromNumber(companycomission.value),
-                    reason: $('#reason').val(),
-                    note: $('#note').val(),
-                    senderId: senderClientId,
-                    reciverId: ReciverID,
+                '@Url.Action("OuterClientTransaction", "OuterTransaction")', {
+                    'CountryId': CountryId.value,
+                    'CoinId': CoinId.value,
+                    'SenderCompanyId': sendByCompanySelect.value,
+                    'Amount': deleteCommaFromNumber(transactionAmount.value),
+                    'OurComission': deleteCommaFromNumber(comission.value),
+                    'SenderCompanyComission': deleteCommaFromNumber(companycomission.value),
+                    'Reason': $('#reason').val(),
+                    'Note': $('#note').val(),
+                    'SenderClientId': senderClientId,
+                    'ReciverClientId': ReciverID,
                 },
                 function (data) {
                     if (data == "True") {
@@ -1031,15 +1038,11 @@
                         toastr["success"]("تم");
                     } else {
                         toastr["error"]("حدث خطاء ما الرجاء إعادة تحميل الصفحة  و إعادة المحاولة");
-                        alert('563');
+                        
                     }
                 }
             )
         }
-
-
-
-
 
             //////////////////////////////////////////////////////////////////////////////
         else if (TypeOfPayId.value == 2) {
@@ -1060,7 +1063,7 @@
                 formData.append('Phone', reciverPhone.value);
                 formData.append('address', reciverAddress.value);
                 $.ajax({
-                    url: "AddNewClient",
+                    url: '@Url.Action("AddNewClientFroTransaction", "Client")',
                     method: "post",
                     data: formData,
                     processData: false,
@@ -1076,7 +1079,7 @@
             else {
                 ReciverID = reciverClientSelect.value;
                 $.post(
-                    'CheckAddressAndNumberForReciver', {
+                    '@Url.Action("UpdateAddressAndPhoneNumberIfNotExist", "Client")', {
                         clientId: ReciverID,
                         phone: reciverPhone.value,
                         address: reciverAddress.value
@@ -1085,19 +1088,19 @@
 
             ////////////////heeer
             $.post(
-                'OuterAgentTransaction', {
-                    countryId: CountryId.value,
-                    coinId: CoinId.value,
-                    companyId: sendByCompanySelect.value,
-                    amount: deleteCommaFromNumber(transactionAmount.value),
-                    comission: deleteCommaFromNumber(comission.value),
-                    comapnyComission: deleteCommaFromNumber(companycomission.value),
-                    reason: $('#reason').val(),
-                    note: $('#note').val(),
-                    senderId: seldnerId,
-                    reciverId: ReciverID,
-                    reciveingAmount: reciveingAmount,
-                    senderCommission: AgetComission,
+                '@Url.Action("OuterAgentTransaction", "OuterTransaction")', {
+                    'CountryId': CountryId.value,
+                    'CoinId': CoinId.value,
+                    'SenderCompanyId': sendByCompanySelect.value,
+                    'Amount': deleteCommaFromNumber(transactionAmount.value),
+                    'OurComission': deleteCommaFromNumber(comission.value),
+                    'SenderCompanyComission': deleteCommaFromNumber(companycomission.value),
+                    'Reason': $('#reason').val(),
+                    'Note': $('#note').val(),
+                    'SenderClientId': seldnerId,
+                    'ReciverClientId': ReciverID,
+                    'RecivingAmount': reciveingAmount,
+                    'SenderCleirntCommission': AgetComission,
                 },
                 function (data) {
                     if (data == "True") {
@@ -1119,7 +1122,7 @@
                 formData.append("fullName", $('#clientSenderByCompant').val());
                 formData.append("Phone", $('#senderPhoneByCompany').val());
                 $.ajax({
-                    url: "AddNewClient",
+                    url: '@Url.Action("AddNewClientFroTransaction", "Client")',
                     method: "post",
                     data: formData,
                     processData: false,
@@ -1145,7 +1148,7 @@
                 formData.append('Phone', reciverPhone.value);
                 formData.append('address', reciverAddress.value);
                 $.ajax({
-                    url: "AddNewClient",
+                    url: '@Url.Action("AddNewClientFroTransaction", "Client")',
                     method: "post",
                     data: formData,
                     processData: false,
@@ -1165,7 +1168,7 @@
             else {
                 ReciverID = reciverClientSelect.value;
                 $.post(
-                    'CheckAddressAndNumberForReciver', {
+                    '@Url.Action("UpdateAddressAndPhoneNumberIfNotExist", "Client")', {
                         clientId: ReciverID,
                         phone: reciverPhone.value,
                         address: reciverAddress.value
@@ -1177,20 +1180,20 @@
             }
 
             $.post(
-                'OuterCompanyTranasction',
+                '@Url.Action("OuterCompanyTranasction", "OuterTranasction")',
                 {
-                    coinID: CoinId.value,
-                    countryId: $('#countryId').val(),
-                    sendByCompanyId: sendByCompanySelect.value,
-                    amount: deleteCommaFromNumber(transactionAmount.value),
-                    comission: deleteCommaFromNumber(comission.value),
-                    companyComission: deleteCommaFromNumber(companycomission.value),
-                    reciverdByCompanyCommission: deleteCommaFromNumber(secounCompanyCommission),
-                    reason: $('#reason').val(),
-                    note: $('#note').val(),
-                    reciveByCompanyId: $('#reciverCompany').val(),
-                    reciverId: ReciverID,
-                    senderID: senderId
+                    'CoinId': CoinId.value,
+                    'CountryId': $('#countryId').val(),
+                    'SenderCompanyId': sendByCompanySelect.value,
+                    'Amount': deleteCommaFromNumber(transactionAmount.value),
+                    'OurComission': deleteCommaFromNumber(comission.value),
+                    'SenderCompanyComission': deleteCommaFromNumber(companycomission.value),
+                    'ReceiverCompanyComission': deleteCommaFromNumber(secounCompanyCommission),
+                    'Reason': $('#reason').val(),
+                    'Note': $('#note').val(),
+                    'ReceiverCompanyId': $('#reciverCompany').val(),
+                    'ReciverClientId': ReciverID,
+                    'SenderClientId': senderId
                 },
                 function (data) {
                     if (data == "true") {
@@ -1234,7 +1237,7 @@
             return;
         }
         $.post(
-            'GetClientBlance', {
+            '@Url.Action("GetClientCashes", "ClientCash")', {
                 clientId: agentId,
                 coinId: coinId
             },
@@ -1246,6 +1249,7 @@
         )
     }
     $('#agentSelect').change(function () {
+        debugger;
         if ($(this).val() == "") {
             clearAgentBalance();
             return;
@@ -1270,7 +1274,7 @@
             return;
         }
         $.post(
-            'CalcComission', {
+            '@Url.Action("CalcComission", "CompanyCommission")', {
                 companyId: companyId,
                 countryId: countryId,
                 coinId: coinId,
@@ -1285,7 +1289,7 @@
             }
         );
         $.post(
-            'CalcMyComission', {
+            '@Url.Action("CalcComission", "BranchCommission")', {
                 countryId: countryId,
                 coinId: coinId,
                 amount: amount,
@@ -1296,10 +1300,11 @@
         )
     }
     function CallcBalanceForClient(clientId, coinId) {
+        debugger;
         $.post(
-            '/BwClients/GetBlanace', {
-                clientId: clientId,
-                coinId: coinId
+            '@Url.Action("GetClientCashes", "ClientCash")', {
+                'clientId': clientId,
+                'coinId': coinId
             },
             function (data) {
                 debugger;

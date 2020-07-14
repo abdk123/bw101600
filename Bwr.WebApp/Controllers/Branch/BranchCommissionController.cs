@@ -2,6 +2,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Web.Mvc;
 using BWR.Application.Dtos.Branch;
+using BWR.Application.Dtos.Branch.BranchCommission;
 using BWR.Application.Interfaces.Branch;
 using BWR.Infrastructure.Exceptions;
 using BWR.ShareKernel.Exceptions;
@@ -151,6 +152,22 @@ namespace Bwr.WebApp.Controllers
         }
 
         #endregion
+
+        public decimal? CalcComission(int countryId, int coinId, decimal amount, int? branchId)
+        {
+            if (branchId == null)
+                branchId = BranchHelper.Id;
+
+            var input = new BranchCommissionInputDto()
+            {
+                Amount = amount,
+                BranchId = branchId,
+                CoinId = coinId,
+                CountryId = countryId
+            };
+
+            return _branchCommissionAppService.CalcComission(input);
+        }
 
         #region Helper Method
 

@@ -13,13 +13,13 @@ var getUrlParams = function (url) {
 };
 var params = getUrlParams(window.location.href);
 $(document).ready(function () {
-    FillCoinsleect();
+    fillCoinSelected();
     $('#toDate').val(params.to);
     $('#formDate').val(params.from);
     FillCashFlowTalbe(params.branchid, params.coinId, params.from, params.to);
     GetActualuBalnce(params.coinId  );
 });
-function FillCoinsleect() {
+function fillCoinSelected() {
     $.post(
         '/System/_JsonGetCoinInBalance', {
             id: params.branchid

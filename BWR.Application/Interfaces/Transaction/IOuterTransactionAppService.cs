@@ -8,5 +8,8 @@ namespace BWR.Application.Interfaces.Transaction
         IList<OuterTransactionDto> GetTransactions(OuterTransactionInputDto input);
         OuterTransactionDto GetTransactionById(int id);
         OuterTransactionInsertInitialDto InitialInputData();
+        OuterTransactionDto OuterClientTransaction(OuterTransactionInsertDto input);
+        OuterTransactionDto OuterAgentTransaction(OuterTransactionInsertDto input);
+        OuterTransactionDto OuterCompanyTranasction(OuterTransactionInsertDto input);
     }
 }

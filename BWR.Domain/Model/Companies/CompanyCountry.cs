@@ -10,6 +10,7 @@ namespace BWR.Domain.Model.Companies
         public CompanyCountry()
         {
             this.CompanyComissions = new List<CompanyCommission>();
+            this.CompanyCountries = new List<CompanyCountry>();
         }
 
         public bool IsEnabled { get; set; }
@@ -23,5 +24,6 @@ namespace BWR.Domain.Model.Companies
         public virtual Country Country { get; set; }
 
         public virtual IList<CompanyCommission> CompanyComissions { get; set; }
+        public virtual IList<CompanyCountry> CompanyCountries { get; set; }
     }
 }

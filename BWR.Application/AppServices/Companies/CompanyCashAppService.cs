@@ -23,6 +23,50 @@ namespace BWR.Application.AppServices.Companies
             _appSession = appSession;
         }
 
+        public IList<CompanyCashesDto> GetAll()
+        {
+            IList<CompanyCashesDto> companyBalanceDtos = new List<CompanyCashesDto>();
+            try
+            {
+                var companyCashs = _unitOfWork.GenericRepository<CompanyCash>().GetAll().ToList();
+                foreach (var companyCash in companyCashs)
+                {
+                    var companyBalanceDto = new CompanyCashesDto()
+                    {
+                        Id = companyCash.Id,
+                        CoinId = companyCash.CoinId,
+                        CoinName = companyCash.Coin != null ? companyCash.Coin.Name : string.Empty,
+                        CompanyId = companyCash.CompanyId,
+                        InitialBalance = companyCash.InitialBalance,
+                        Total = companyCash.Total,
+                        MaxCreditor = companyCash.MaxCreditor,
+                        MaxDebit = companyCash.MaxDebit
+                    };
+
+                    decimal onHim = 0;
+                    decimal forHim = 0;
+                    if (companyBalanceDto.Total > 0)
+                    {
+                        forHim = (companyBalanceDto.Total * 100) / 100;
+                    }
+                    else if (companyBalanceDto.Total < 0)
+                    {
+                        onHim = (companyBalanceDto.Total * 100) / 100;
+                    }
+
+                    companyBalanceDto.ForHim = forHim;
+                    companyBalanceDto.OnHim = onHim;
+
+                    companyBalanceDtos.Add(companyBalanceDto);
+                }
+            }
+            catch (BwrException ex)
+            {
+                Tracing.SaveException(ex);
+            }
+            return companyBalanceDtos;
+        }
+
         public IList<CompanyCashesDto> GetCompanyCashs(int companyId)
         {
             IList<CompanyCashesDto> companyBalanceDtos = new List<CompanyCashesDto>();

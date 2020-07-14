@@ -61,13 +61,12 @@ namespace BWR.Infrastructure.Context
         public DbSet<Treasury> Treasurys { get; set; }
         public DbSet<UserTreasuery> UserTreasueries { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionStatus> TransactionsStatus { get; set; }
-        public DbSet<TransactionType> TransactionTypes { get; set; }
+
         public DbSet<BWR.Domain.Model.Settings.Action> Actions { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Coin> Coins { get; set; }
         public DbSet<Country> Countrys { get; set; }
-        public DbSet<TypeOfPay> TypeOfPays { get; set; }
+
         public DbSet<Claim> Claims { get; set; }
         public DbSet<ExternalLogin> ExternalLogins { get; set; }
         public DbSet<Permission> Permissions { get; set; }

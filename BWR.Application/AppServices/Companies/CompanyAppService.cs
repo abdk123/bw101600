@@ -244,5 +244,7 @@ namespace BWR.Application.AppServices.Companies
 
             return false;
         }
+
+        
     }
 }

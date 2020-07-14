@@ -2,9 +2,11 @@
 
 namespace BWR.Domain.Model.Settings
 {
-    public class TypeOfPay: Entity
+    public enum TypeOfPay
     {
-        public string Name { get; set; }
-        public bool IsEnabled { get; set; }
+        None,
+        Cash,
+        ClientsReceivables,
+        CompaniesReceivables
     }
 }
